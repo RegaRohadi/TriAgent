@@ -1,0 +1,49 @@
+services:
+  agent:
+    build: .
+    image: pointstar-email-agent
+    container_name: pointstar-email-agent
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - ./knowledge_base:/app/knowledge_base
+      - ./data:/app/data
+    restart: unless-stopped
+
+  chat:
+    build: .
+    image: pointstar-email-agent
+    container_name: pointstar-doc-agent
+    command: ["uvicorn", "part3_doc_agent.web:app", "--host", "0.0.0.0", "--port", "8000"]
+    ports:
+      - "${CHAT_PORT:-8001}:8000"
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - ./data:/app/data
+      - ./part3_doc_agent/sample_document.md:/app/part3_doc_agent/sample_document.md
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
+      interval: 30s
+      timeout: 5s
+      start_period: 40s
+      retries: 3
+    restart: unless-stopped
+
+  scraper:
+    build: .
+    image: pointstar-email-agent
+    container_name: pointstar-scraper
+    command: ["uvicorn", "part2_scraper.web:app", "--host", "0.0.0.0", "--port", "8000"]
+    ports:
+      - "${SCRAPER_PORT:-8002}:8000"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      - SCRAPER_CAMOUFOX_ENABLED=${SCRAPER_CAMOUFOX_ENABLED:-true}
+    restart: unless-stopped

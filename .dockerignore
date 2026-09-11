@@ -1,0 +1,12 @@
+.env
+.git
+.venv
+venv
+__pycache__
+*.pyc
+.pytest_cache
+data/*.db
+data/index_cache
+.cache
+part1_email_agent/frontend/node_modules
+part1_email_agent/static/dist

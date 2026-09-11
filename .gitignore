@@ -1,0 +1,14 @@
+.env
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+data/*.db
+data/index_cache/
+data/part3_sessions/
+.cache/
+*.egg-info/
+.DS_Store
+part1_email_agent/frontend/node_modules/
+part1_email_agent/static/dist/

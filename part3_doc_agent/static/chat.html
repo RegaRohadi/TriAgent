@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PointStar Document Agent</title>
+<script>
+(() => {
+  const root = document.documentElement;
+  const query = matchMedia("(prefers-color-scheme: dark)");
+  let chosen = null;
+  const apply = () => { root.dataset.theme = chosen || (query.matches ? "dark" : "light"); };
+  apply();
+  query.addEventListener("change", apply);
+  addEventListener("message", (e) => {
+    if (e.source !== window.parent || e.data?.type !== "theme") return;
+    if (e.data.theme === "light" || e.data.theme === "dark") { chosen = e.data.theme; apply(); }
+  });
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap">
+<style>
+    :root {
+    --bg: #ffffff; --panel: #ffffff; --ink: #0a0a0a; --muted: #737373; --faint: #a3a3a3;
+    --line: #ebebeb; --line-hover: #d4d4d4; --field: #ebebeb; --hover: #f7f7f7;
+    --accent: #155dfc; --accent-hi: #2b7fff; --accent-lo: #1447e6; --focus: #2b7fff;
+    --ok: #3d6300; --ok-bg: #d8f999; --warn: #854d0e; --warn-bg: #fef08a; --crit: #9f1239;
+    --tool-bg: #dbeafe; --tool: #193cb8;
+    --code-bg: #f7f7f7; --bubble-user: #155dfc; --bubble-bot: #f7f7f7;
+    --shadow-card: 0 1px 1px 0 rgb(0 0 0 / 0.05); --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  }
+  :root { color-scheme: light; }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #121212; --panel: #121212; --ink: #fafafa; --muted: #a3a3a3; --faint: #737373;
+    --line: #404040; --line-hover: #737373; --field: #262626; --hover: #262626;
+    --accent: #51a2ff; --accent-hi: #2b7fff; --accent-lo: #155dfc; --focus: #2b7fff;
+    --ok: #7ccf00; --ok-bg: rgb(53 83 14 / 0.6); --warn: #f0b100; --warn-bg: rgb(67 32 4 / 0.6); --crit: #ff2056;
+    --tool-bg: rgb(22 36 86 / 0.6); --tool: #8ec5ff;
+    --code-bg: #262626; --bubble-user: #155dfc; --bubble-bot: #262626;
+    --shadow-card: 0 1px 1px 0 rgb(0 0 0 / 0.14); --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.18);
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased;
+         font: 14px/1.5 Inter, ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif; }
+  header { padding: 16px 24px; border-bottom: 1px solid var(--line); background: var(--panel);
+           display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  h1 { font-size: 18px; line-height: 26px; font-weight: 600; margin: 0; }
+  .sub { color: var(--muted); font-size: 12px; letter-spacing: .15px; }
+  .wrap { display: grid; grid-template-columns: 1fr minmax(260px, 320px); gap: 20px;
+          padding: 24px; align-items: start; max-width: 1240px; margin: 0 auto; }
+  @media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 24px; padding: 20px;
+          box-shadow: var(--shadow-card); min-width: 0; }
+  .card h2 { font-size: 16px; line-height: 22px; font-weight: 600; color: var(--ink); margin: 0 0 14px; }
+  .side { display: grid; gap: 16px; }
+
+  .log { display: flex; flex-direction: column; gap: 14px; min-height: 340px;
+         max-height: calc(100vh - 320px); overflow-y: auto; padding-right: 4px; }
+  .msg { display: flex; flex-direction: column; gap: 6px; max-width: 82%; }
+  .msg.user { align-self: flex-end; align-items: flex-end; }
+  .msg.bot { align-self: flex-start; }
+  .bubble { padding: 10px 14px; border-radius: 18px; background: var(--bubble-bot); white-space: pre-wrap; }
+  .msg.bot .bubble { border-bottom-left-radius: 6px; }
+  .msg.user .bubble { background: var(--bubble-user); color: #fff; border-bottom-right-radius: 6px; }
+  .msg.pending .bubble { color: var(--muted); font-style: italic; }
+
+  .meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 12px; }
+  .badge { display: inline-block; padding: 4px 6px; border-radius: 6px; font-weight: 500; font-size: 12px; letter-spacing: .15px; }
+  .badge.tool { background: var(--tool-bg); color: var(--tool); }
+  .badge.none { background: var(--ok-bg); color: var(--ok); }
+  .badge.warn { background: var(--warn-bg); color: var(--warn); }
+  .cite { color: var(--muted); font-family: ui-monospace, Consolas, monospace; font-size: 11px; }
+
+  details.why { font-size: 12px; color: var(--muted); }
+  details.why summary { cursor: pointer; color: var(--accent); font-weight: 500; }
+  details.why dl { margin: 8px 0 0; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; }
+  details.why dt { color: var(--muted); font-weight: 600; }
+  details.why dd { margin: 0; font-family: ui-monospace, Consolas, monospace; word-break: break-word; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0 0; }
+  .chip { background: var(--panel); border: 1px solid var(--line); color: var(--ink); box-shadow: var(--shadow-xs);
+          border-radius: 999px; padding: 5px 12px; font-size: 13px; font-weight: 500; cursor: pointer;
+          transition: background .15s ease, border-color .15s ease; }
+  .chip:hover { background: var(--hover); border-color: var(--line-hover); }
+
+  .composer { display: flex; gap: 8px; margin-top: 16px; }
+  input[type=text] { flex: 1; background: var(--field); border: 0; border-radius: 10px; padding: 8px 12px;
+                     font: inherit; color: inherit; outline: none; box-shadow: inset 0 0 0 2px transparent;
+                     transition: box-shadow .15s ease; }
+  input[type=text]::placeholder { color: var(--faint); }
+  input[type=text]:hover { box-shadow: inset 0 0 0 2px var(--line-hover); }
+  input[type=text]:focus { box-shadow: inset 0 0 0 2px var(--muted); }
+  button { background: linear-gradient(180deg, var(--accent-hi), var(--accent-lo)); color: #fff; border: 0;
+           border-radius: 10px; padding: 8px 14px; font: inherit; font-weight: 500; cursor: pointer;
+           box-shadow: var(--shadow-xs); transition: filter .15s ease, transform .2s ease; }
+  button:hover:not(:disabled) { filter: brightness(1.08); }
+  button:active:not(:disabled) { transform: scale(.98); }
+  button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  button.ghost { background: var(--panel); color: var(--ink); border: 1px solid var(--line); }
+  button.ghost:hover:not(:disabled) { filter: none; background: var(--hover); border-color: var(--line-hover); }
+  .chip:hover:not(:disabled) { filter: none; }
+  button:disabled { opacity: .55; cursor: progress; }
+
+  dl.facts { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 5px 12px; font-size: 13px; }
+  dl.facts dt { color: var(--muted); }
+  dl.facts dd { margin: 0; font-weight: 600; }
+  .empty { color: var(--muted); font-size: 13px; }
+  ul.sections { margin: 0; padding-left: 16px; color: var(--muted); font-size: 12.5px; line-height: 1.7; }
+</style>
+</head>
+<body>
+<header>
+  <h1>PointStar Document Agent</h1>
+  <span class="sub" id="sub">starting…</span>
+</header>
+
+<div class="wrap">
+  <main class="card">
+    <h2>Conversation</h2>
+    <div class="log" id="log"></div>
+    <div class="chips" id="chips"></div>
+    <form class="composer" id="form">
+      <input type="text" id="input" placeholder="Ask about plans, pricing, storage, SLA credits…" autocomplete="off">
+      <button id="send" type="submit">Send</button>
+    </form>
+  </main>
+
+  <aside class="side">
+    <div class="card">
+      <h2>What I remember</h2>
+      <div id="memory"></div>
+      <div class="composer">
+        <button class="ghost" id="forget" type="button">Forget everything</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Source document</h2>
+      <div class="sub" id="docname">—</div>
+      <ul class="sections" id="sections"></ul>
+    </div>
+  </aside>
+</div>
+
+<script>
+const SESSION = (() => {
+  let id = localStorage.getItem("session_id");
+  if (!id) { id = "web-" + Math.random().toString(36).slice(2, 9); localStorage.setItem("session_id", id); }
+  return id;
+})();
+
+const SUGGESTIONS = [
+  "Hi, I'm Rega and I run IT for a design studio in Jakarta.",
+  "How much is the Business plan per seat?",
+  "What's 15% of 4800?",
+  "We need 14 Business seats for a year — what would we pay with the annual discount?",
+  "What service credit applies at 99.2% uptime?",
+  "Remind me, what's my name?",
+  "Who won the World Cup in 2022?",
+];
+
+const log = document.getElementById("log");
+const input = document.getElementById("input");
+const sendButton = document.getElementById("send");
+
+function el(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+
+function addUser(text) {
+  const msg = el("div", "msg user");
+  msg.appendChild(el("div", "bubble", text));
+  log.appendChild(msg);
+  log.scrollTop = log.scrollHeight;
+}
+
+function addPending() {
+  const msg = el("div", "msg bot pending");
+  msg.appendChild(el("div", "bubble", "thinking…"));
+  log.appendChild(msg);
+  log.scrollTop = log.scrollHeight;
+  return msg;
+}
+
+function renderAnswer(msg, data) {
+  msg.className = "msg bot";
+  msg.textContent = "";
+  msg.appendChild(el("div", "bubble", data.answer));
+
+  const meta = el("div", "meta");
+  if (data.tools_used.length === 0) {
+    meta.appendChild(el("span", "badge none", "no tools needed"));
+  } else {
+    for (const tool of data.tools_used) meta.appendChild(el("span", "badge tool", tool));
+  }
+  if (!data.fully_answerable) meta.appendChild(el("span", "badge warn", "not fully in the handbook"));
+  for (const citation of data.citations) meta.appendChild(el("span", "cite", citation));
+  msg.appendChild(meta);
+
+  const why = el("details", "why");
+  why.appendChild(el("summary", null, "why this happened"));
+  const dl = el("dl");
+  const row = (term, value) => {
+    if (!value) return;
+    dl.appendChild(el("dt", null, term));
+    dl.appendChild(el("dd", null, value));
+  };
+  row("routing", data.routing_reason);
+  if (data.queries.length) row("queries", data.queries.join("  |  "));
+  if (data.calculation) row("arithmetic", data.calculation.expression + "   — " + data.calculation.explanation);
+  for (const call of data.tool_calls) {
+    row(call.tool, `${call.tool_input} -> ${call.ok ? call.output : "FAILED: " + call.error}`);
+  }
+  if (data.retrieved.length) {
+    row("retrieved", data.retrieved.map(r => `${r.citation} (${r.score})`).join("\n"));
+  }
+  row("path", data.trace.map(t => `${t.node}:${t.outcome}`).join(" -> "));
+  why.appendChild(dl);
+  msg.appendChild(why);
+
+  log.scrollTop = log.scrollHeight;
+}
+
+function renderMemory(profile) {
+  const target = document.getElementById("memory");
+  target.textContent = "";
+  const keys = Object.keys(profile || {});
+  if (!keys.length) {
+    target.appendChild(el("div", "empty", "You have not told me anything about yourself yet."));
+    return;
+  }
+  const dl = el("dl", "facts");
+  for (const key of keys) {
+    dl.appendChild(el("dt", null, key.replace(/_/g, " ")));
+    dl.appendChild(el("dd", null, profile[key]));
+  }
+  target.appendChild(dl);
+}
+
+async function send(text) {
+  addUser(text);
+  const pending = addPending();
+  sendButton.disabled = true;
+  try {
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text, session_id: SESSION }),
+    });
+    if (!response.ok) throw new Error(await response.text());
+    const data = await response.json();
+    renderAnswer(pending, data);
+    renderMemory(data.memory);
+  } catch (error) {
+    pending.className = "msg bot";
+    pending.textContent = "";
+    const bubble = el("div", "bubble", "The request failed: " + error.message);
+    pending.appendChild(bubble);
+  } finally {
+    sendButton.disabled = false;
+    input.focus();
+  }
+}
+
+document.getElementById("form").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = "";
+  send(text);
+});
+
+document.getElementById("forget").addEventListener("click", async () => {
+  await fetch("/api/session/" + encodeURIComponent(SESSION), { method: "DELETE" });
+  renderMemory({});
+  log.textContent = "";
+});
+
+const chips = document.getElementById("chips");
+for (const suggestion of SUGGESTIONS) {
+  const chip = el("button", "chip", suggestion.length > 52 ? suggestion.slice(0, 50) + "…" : suggestion);
+  chip.type = "button";
+  chip.title = suggestion;
+  chip.addEventListener("click", () => send(suggestion));
+  chips.appendChild(chip);
+}
+
+(async () => {
+  const health = await (await fetch("/api/health")).json();
+  document.getElementById("sub").textContent =
+    `${health.document} · ${health.chunks} chunks · llm: ${health.llm_backend} · session: ${SESSION}`;
+  document.getElementById("docname").textContent = health.document;
+  const list = document.getElementById("sections");
+  for (const section of health.sections) {
+    list.appendChild(el("li", null, section.trim().replace(/^-\s*/, "")));
+  }
+  const session = await (await fetch("/api/session/" + encodeURIComponent(SESSION))).json();
+  renderMemory(session.memory);
+  for (const turn of session.turns) {
+    if (turn.role === "user") addUser(turn.content);
+    else { const msg = el("div", "msg bot"); msg.appendChild(el("div", "bubble", turn.content)); log.appendChild(msg); }
+  }
+  input.focus();
+})();
+</script>
+</body>
+</html>

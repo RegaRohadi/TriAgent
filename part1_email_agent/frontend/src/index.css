@@ -1,0 +1,6 @@
+@import "@fontsource-variable/inter";
+@import "./styles/globals.css";
+
+.companion-frame {
+  height: calc(100vh - var(--header-h, 64px));
+}

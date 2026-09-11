@@ -1,0 +1,91 @@
+@import "tailwindcss";
+@import "./theme.css";
+@import "./typography.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --font-inter: "Inter Variable";
+  --font-mono-source: "JetBrains Mono";
+}
+
+html,
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-variant-ligatures: contextual;
+  font-kerning: normal;
+}
+
+html {
+  color-scheme: light;
+  background-color: var(--color-background-full);
+}
+html.dark {
+  color-scheme: dark;
+}
+body {
+  background-color: var(--color-background-full);
+  color: var(--color-text-primary);
+}
+
+.dark .shadow-2xs {
+  --tw-shadow: var(--shadow-2xs);
+}
+.dark .shadow-xs {
+  --tw-shadow: var(--shadow-xs);
+}
+.dark .shadow-sm {
+  --tw-shadow: var(--shadow-sm);
+}
+.dark .shadow-card {
+  --tw-shadow: var(--shadow-card);
+}
+.dark .shadow-dropdown {
+  --tw-shadow: var(--shadow-dropdown);
+}
+
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+@media (max-width: 639px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+.bui-table {
+  @apply w-full border-collapse text-left;
+}
+.bui-table th {
+  @apply px-3 py-2.5 text-left align-middle text-body-medium text-text-tertiary whitespace-nowrap outline-none;
+  background-color: var(--color-background-secondary-default);
+  border-top: 1px solid var(--color-separator-border);
+  border-bottom: 1px solid var(--color-separator-border);
+}
+.bui-table td {
+  @apply px-3 py-2.5 align-middle text-body-medium text-text-primary outline-none;
+}
+.bui-table tbody tr {
+  @apply transition-colors duration-150;
+  border-bottom: 1px solid var(--color-separator-border);
+}
+.bui-table tbody tr[data-focus-visible] {
+  @apply ring-2 ring-inset ring-border-focus-ring;
+}
+.bui-table.bui-table-sm th,
+.bui-table.bui-table-sm td {
+  @apply px-2.5 py-1.5 text-body-2-medium;
+}
