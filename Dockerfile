@@ -1,8 +1,8 @@
 FROM node:20-slim AS frontend
 WORKDIR /frontend
-COPY part1_email_agent/frontend/package.json part1_email_agent/frontend/package-lock.json ./
+COPY frontend/package.json frontend/package-lock.json ./
 RUN npm ci
-COPY part1_email_agent/frontend/ ./
+COPY frontend/ ./
 RUN npm run build
 
 FROM python:3.12-slim
@@ -28,7 +28,7 @@ ENV HF_HUB_OFFLINE=1 \
     TRANSFORMERS_OFFLINE=1
 
 COPY . .
-COPY --from=frontend /static/dist ./part1_email_agent/static/dist
+COPY --from=frontend /frontend/dist ./frontend/dist
 
 EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \

@@ -6,13 +6,13 @@ from part2_scraper.extractor import ExtractionError, extract, link_density, norm
 from bs4 import BeautifulSoup
 
 ARTICLE_TEXT = (
-    "PointStar was founded in 2008 and is headquartered in Singapore. "
+    "Nimbus Cloud was founded in 2008 and is headquartered in Singapore. "
     "The company is a Google Cloud Premier Partner and an Oracle NetSuite 5-Star Solution Partner. "
     "It operates seven offices across three countries with more than 170 employees. "
 )
 
 SEMANTIC_PAGE = f"""
-<html><head><title>About PointStar</title></head>
+<html><head><title>About Nimbus Cloud</title></head>
 <body>
   <header><h1>Site header</h1></header>
   <nav><a href="/a">Home</a><a href="/b">Products</a><a href="/c">Contact</a></nav>
@@ -58,7 +58,7 @@ def test_density_scoring_handles_pages_without_semantic_tags():
     assert "One" not in result.text
 
 def test_title_is_read_before_the_header_is_deleted():
-    assert extract(SEMANTIC_PAGE).title == "About PointStar"
+    assert extract(SEMANTIC_PAGE).title == "About Nimbus Cloud"
 
 def test_reduction_ratio_is_reported():
     result = extract(SEMANTIC_PAGE)

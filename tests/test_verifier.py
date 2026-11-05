@@ -12,7 +12,7 @@ class StubLLM:
     def generate_structured(self, prompt, schema, *, system=None):
         return self.result
 
-DESK = "Rega's Support"
+DESK = "Nimbus Support"
 
 CHUNKS = [
     RetrievedChunkView(
@@ -26,12 +26,12 @@ def draft(text: str, citations=("KB-FAQ-003",)) -> DraftResponse:
 
 @pytest.mark.parametrize(
     "flagged",
-    ["Rega's Support", "regas support", "Best regards, Rega's Support", "Regards, Rega's Support", "  "],
+    ["Nimbus Support", "nimbus support", "Best regards, Nimbus Support", "Regards, Nimbus Support", "  "],
 )
 def test_signature_is_not_treated_as_an_unsupported_claim(flagged):
     llm = StubLLM(VerificationResult(fully_grounded=False, unsupported_claims=[flagged]))
 
-    result = verifier.verify_draft(llm, draft("Try a password reset. Rega's Support"), CHUNKS, desk_name=DESK)
+    result = verifier.verify_draft(llm, draft("Try a password reset. Nimbus Support"), CHUNKS, desk_name=DESK)
 
     assert result.fully_grounded, "the desk signing its own name must not block the reply"
     assert result.unsupported_claims == []
@@ -41,7 +41,7 @@ def test_a_real_unsupported_claim_still_blocks():
         VerificationResult(fully_grounded=False, unsupported_claims=["refunds are processed in 3 days"])
     )
 
-    result = verifier.verify_draft(llm, draft("Refunds take 3 days. Rega's Support"), CHUNKS, desk_name=DESK)
+    result = verifier.verify_draft(llm, draft("Refunds take 3 days. Nimbus Support"), CHUNKS, desk_name=DESK)
 
     assert not result.fully_grounded
     assert result.unsupported_claims == ["refunds are processed in 3 days"]
@@ -49,7 +49,7 @@ def test_a_real_unsupported_claim_still_blocks():
 def test_signature_is_dropped_but_real_claims_survive():
     llm = StubLLM(
         VerificationResult(
-            fully_grounded=False, unsupported_claims=["Rega's Support", "you get a full refund"]
+            fully_grounded=False, unsupported_claims=["Nimbus Support", "you get a full refund"]
         )
     )
 

@@ -6,7 +6,7 @@ from core.llm import LLMClient
 from part1_email_agent.models import ClassificationResult
 
 SYSTEM_PROMPT = (
-    "You are an email triage classifier for PointStar, a cloud consulting company that resells "
+    "You are an email triage classifier for Nimbus Cloud, a cloud consulting company that resells "
     "Google Workspace, Google Cloud Platform, Oracle NetSuite, JumpCloud, Zoom and Cisco Meraki, "
     "and delivers implementation/consulting services. Classify support emails accurately and "
     "report honest confidence scores. Never invent a category outside the allowed list."

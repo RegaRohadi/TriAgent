@@ -1,4 +1,4 @@
-# PointStar FAQ — Technical Support
+# Nimbus Cloud FAQ — Technical Support
 
 **Document ID:** KB-FAQ-003
 **Version:** 2.0
@@ -22,7 +22,7 @@ customization or Google Workspace schema change.
 **Q3. I'm hitting Google Cloud Platform API or quota limits.**
 GCP quotas vary by service and project tier. Rate-limit errors return HTTP
 429. Check Quotas in the GCP Console, or contact your Account Manager about
-a quota increase request through PointStar as your reseller.
+a quota increase request through Nimbus Cloud as your reseller.
 
 **Q4. Is there a status page for outages?**
 For Google Workspace/GCP outages, check Google's official Workspace Status
@@ -59,7 +59,7 @@ stop further syncs and escalate right away.
 
 **Q9. Is there a mobile app?**
 Google Workspace, NetSuite, and Zoom each provide their own official mobile
-apps (iOS/Android) for their respective platforms; PointStar does not
+apps (iOS/Android) for their respective platforms; Nimbus Cloud does not
 maintain a separate unified mobile app.
 
 **Q10. What are your support response time SLAs?**
@@ -69,8 +69,8 @@ Standard. Data loss, outages, and security incidents are always treated as
 Critical severity.
 
 **Q11. How do I report a bug vs. request a feature?**
-Bugs in a PointStar-built integration or custom NetSuite/AppSheet workflow:
+Bugs in a Nimbus Cloud-built integration or custom NetSuite/AppSheet workflow:
 use the in-app "Report an Issue" button. For bugs in the underlying platform
 itself (Google Workspace, NetSuite, Zoom, Meraki), these must be reported to
-the vendor, and PointStar support can assist with filing that ticket.
+the vendor, and Nimbus Cloud support can assist with filing that ticket.
 Feature requests: submit via the Feedback FAQ process (KB-FAQ-004).

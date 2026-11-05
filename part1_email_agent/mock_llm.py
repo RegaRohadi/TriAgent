@@ -134,7 +134,7 @@ class MockLLM:
         doc_ids = sorted(set(CHUNK_SOURCE_PATTERN.findall(context)))
         excerpt = " ".join(context.split())[:400].rsplit(" ", 1)[0]
         text = (
-            "Thank you for contacting Rega's Support.\n\n"
+            "Thank you for contacting Nimbus Support.\n\n"
             f"Based on our knowledge base: {excerpt}\n\n"
             "If anything above does not fully address your situation, a specialist will follow up."
         )

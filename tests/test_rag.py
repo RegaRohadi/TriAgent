@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from core.rag import KnowledgeBase, chunk_document
 
-SAMPLE = """PointStar Cloud Solutions - Refund Policy
+SAMPLE = """Nimbus Cloud - Refund Policy
 Document ID: KB-POLICY-001
 1. Scope
-This policy governs refunds for subscriptions billed directly by PointStar.
+This policy governs refunds for subscriptions billed directly by Nimbus Cloud.
 6. Cases Requiring Human Review
 The request involves an Oracle NetSuite contract.
 The refund amount exceeds USD 500.

@@ -84,8 +84,8 @@ class EmailSender:
         message["Subject"] = subject
         message["From"] = formataddr((self.from_name, self.from_address))
         message["To"] = original.sender
-        message["X-PointStar-Trace-Id"] = trace_id
-        message["Message-ID"] = f"<{uuid.uuid4().hex}@pointstar-consulting.example>"
+        message["X-TriAgent-Trace-Id"] = trace_id
+        message["Message-ID"] = f"<{uuid.uuid4().hex}@nimbus-cloud.example>"
         if original.message_id:
             message["In-Reply-To"] = original.message_id
             message["References"] = original.message_id

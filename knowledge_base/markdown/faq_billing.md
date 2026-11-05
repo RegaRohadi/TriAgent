@@ -1,4 +1,4 @@
-# PointStar FAQ — Billing & Subscriptions
+# Nimbus Cloud FAQ — Billing & Subscriptions
 
 **Document ID:** KB-FAQ-002
 **Version:** 2.0
@@ -33,7 +33,7 @@ term per Google's reseller terms.
 **Q5. Do you charge GST/VAT?**
 Yes, applicable local tax is added based on the billing entity's country —
 Singapore GST, Malaysia SST, or Indonesia PPN. Tax-exempt organizations
-should contact billing@pointstar-consulting.example with documentation.
+should contact billing@nimbus-cloud.example with documentation.
 
 **Q6. My card payment failed — what happens to my account?**
 For Google Workspace, JumpCloud, or Zoom, we retry failed payments
@@ -73,4 +73,4 @@ switch currency at renewal.
 
 **Q12. Can I get a receipt for expense reporting before the invoice date?**
 Yes, a provisional receipt can be generated on request via
-billing@pointstar-consulting.example.
+billing@nimbus-cloud.example.

@@ -42,7 +42,7 @@ def main() -> None:
         kb = KnowledgeBase(chunks, embedder.encode([c.text for c in chunks]), embedder)
         sender = EmailSender(
             host="127.0.0.1", port=1025, user="test", password="test",
-            from_address="support@pointstar-consulting.example", from_name="Rega's Support",
+            from_address="support@nimbus-cloud.example", from_name="Nimbus Support",
         )
         agent = EmailAgent(
             llm=MockLLM(), kb=kb, store=TicketStore(db_path=Path("data/smtp_e2e_test.db")),

@@ -120,4 +120,4 @@ def test_health_reports_the_word_budget(client):
 def test_the_page_is_served(client):
     response = client.get("/")
     assert response.status_code == 200
-    assert "Compare before / after" in response.text
+    assert "TriAgent" in response.text

@@ -1,21 +1,21 @@
-# PointStar — Company Overview
+# Nimbus Cloud — Company Overview
 
 **Document ID:** KB-INFO-000
 **Version:** 1.0
 **Last Updated:** 2026-01-15
 **Category:** General Reference
 
-> Sourced from public information on point-star.com and affiliated regional
-> sites (pointstar.com.my, pointstar.co.id) as of January 2026, for grounding
-> the support agent's context. Specific billing figures elsewhere in this
-> knowledge base remain illustrative/dummy values for this exercise.
+> ILLUSTRATIVE DOCUMENT. Nimbus Cloud is a fictional company created for the
+> TriAgent demo. Vendor names are real, but the company profile, partnerships
+> and billing figures in this knowledge base are invented for this exercise.
+> Specific figures remain illustrative/dummy values.
 
 ## 1. Who We Are
 
-PointStar is a cloud transformation and technology consulting company founded
+Nimbus Cloud is a cloud transformation and technology consulting company founded
 in 2008, headquartered in Singapore, with offices across Singapore, Malaysia
 (Kuala Lumpur), and Indonesia (Jakarta, Bandung) — over 170 employees across
-7 offices in 3 countries. PointStar has delivered projects for more than
+7 offices in 3 countries. Nimbus Cloud has delivered projects for more than
 3,000 business organizations across the region.
 
 ## 2. Partnerships & Accreditations
@@ -48,6 +48,6 @@ in 2008, headquartered in Singapore, with offices across Singapore, Malaysia
   Professional Services engagements (implementation/consulting invoices).
 - **Technical** questions typically relate to integration/sync issues between
   these platforms, login/SSO (JumpCloud), or platform-specific errors.
-- Because PointStar resells third-party cloud subscriptions, refund terms
+- Because Nimbus Cloud resells third-party cloud subscriptions, refund terms
   differ by product vendor — see Refund Policy (KB-POLICY-001) for the
   category breakdown before answering any refund question.

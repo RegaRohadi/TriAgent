@@ -11,7 +11,7 @@ from part2_scraper.mock_llm import MockSummarizerLLM
 from part2_scraper.models import ExtractedContent
 
 PARAGRAPH = (
-    "PointStar resells Google Workspace and Oracle NetSuite. "
+    "Nimbus Cloud resells Google Workspace and Oracle NetSuite. "
     "Refund eligibility differs by product and by plan type. "
 )
 

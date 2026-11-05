@@ -40,8 +40,8 @@ class FakeSMTP:
 
 def make_sender(**overrides) -> EmailSender:
     defaults = dict(
-        host="smtp.example.com", port=587, user="bot@pointstar-consulting.example",
-        password="secret", from_address="support@pointstar-consulting.example", from_name="Rega's Support",
+        host="smtp.example.com", port=587, user="bot@nimbus-cloud.example",
+        password="secret", from_address="support@nimbus-cloud.example", from_name="Nimbus Support",
     )
     return EmailSender(**{**defaults, **overrides})
 
@@ -76,7 +76,7 @@ def test_enabled_sender_sends_and_sets_headers(monkeypatch):
     assert sent["To"] == "customer@realdomain.com"
     assert sent["Subject"] == "Re: Invoice question"
     assert sent["In-Reply-To"] == "<orig-123@customer.example>"
-    assert sent["X-PointStar-Trace-Id"] == "trace-42"
+    assert sent["X-TriAgent-Trace-Id"] == "trace-42"
     assert sent.get_content().strip() == "Here is your answer."
 
 def test_subject_is_not_double_prefixed(monkeypatch):
@@ -161,10 +161,10 @@ def test_acknowledgement_carries_ticket_number_and_threads_the_reply(monkeypatch
     sent = FakeSMTP.sent_messages[0]
     body = sent.get_content()
     assert "abc123def456" in body, "the customer needs the ticket number to follow up"
-    assert "Rega's Support" in body
+    assert "Nimbus Support" in body
     assert sent["Subject"] == "Re: Data hilang"
     assert sent["In-Reply-To"] == "<orig-9@customer.example>"
-    assert sent["X-PointStar-Trace-Id"] == "abc123def456"
+    assert sent["X-TriAgent-Trace-Id"] == "abc123def456"
 
 def test_acknowledgement_respects_disabled_smtp(monkeypatch):
     monkeypatch.setattr("smtplib.SMTP", lambda *a, **k: (_ for _ in ()).throw(AssertionError("should not connect")))

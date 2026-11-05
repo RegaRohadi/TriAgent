@@ -2,14 +2,13 @@ from __future__ import annotations
 
 import threading
 from contextlib import asynccontextmanager
-from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
 
 from core.config import settings
 from core.logging_config import configure_logging, get_logger
+from core.spa import companion_ports, install_web_ui
 from part3_doc_agent.graph import DocumentAgent
 from part3_doc_agent.memory import ConversationMemory, normalise_session_id
 
@@ -33,12 +32,18 @@ def get_agent() -> DocumentAgent:
 async def lifespan(app: FastAPI):
     global _agent
     configure_logging()
-    log.info("startup_loading_agent", llm=settings.llm_backend, embeddings=settings.embedding_backend)
+    log.info("startup_loading_agent", llm=settings.llm_provider, embeddings=settings.embedding_backend)
     _agent = DocumentAgent()
-    log.info("startup_complete", chunks=len(_agent.kb.chunks), document=settings.chat_document_path.name)
+    log.info(
+        "startup_complete",
+        llm=_agent.llm.name,
+        llm_model=getattr(_agent.llm, "active_model", None),
+        chunks=len(_agent.kb.chunks),
+        document=settings.chat_document_path.name,
+    )
     yield
 
-app = FastAPI(title="PointStar Document Agent", version="1.0.0", lifespan=lifespan)
+app = FastAPI(title="TriAgent Docs", version="1.0.0", lifespan=lifespan)
 
 class ChatRequest(BaseModel):
     message: str
@@ -50,11 +55,14 @@ def health() -> dict:
     return {
         "status": "ok",
         "llm_backend": agent.llm.name,
+        "llm_model": getattr(agent.llm, "active_model", None),
         "embedding_backend": settings.embedding_backend,
         "document": settings.chat_document_path.name,
         "chunks": len(agent.kb.chunks),
         "sections": agent.toc.strip().splitlines(),
         "tools": ["document_search", "calculator"],
+        "companions": companion_ports(),
+        "default_tab": "part3",
     }
 
 @app.post("/api/chat")
@@ -109,6 +117,4 @@ def clear_session(session_id: str) -> dict:
     log.info("session_cleared", session=session_id)
     return {"session_id": session_id, "memory": {}, "turns": []}
 
-@app.get("/", response_class=HTMLResponse)
-def index() -> str:
-    return (Path(__file__).parent / "static" / "chat.html").read_text(encoding="utf-8")
+install_web_ui(app, default_tab="part3")

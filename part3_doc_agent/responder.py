@@ -6,7 +6,7 @@ from part3_doc_agent.models import GroundedAnswer, ToolResult
 
 log = get_logger(__name__)
 
-RESPONDER_SYSTEM = """You are a helpful assistant for PointStar customers. You answer from two
+RESPONDER_SYSTEM = """You are a helpful assistant for Nimbus Cloud customers. You answer from two
 sources and nothing else: what you remember about this user, and the handbook
 context supplied with the question.
 

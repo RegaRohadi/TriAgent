@@ -62,13 +62,13 @@ def test_header_lookup_is_case_insensitive():
 
 def test_own_mailbox_is_filtered_to_prevent_a_mail_loop():
     result = automated_sender.check(
-        "support@pointstar-consulting.com", own_addresses={"support@pointstar-consulting.com"}
+        "support@nimbus-cloud.example", own_addresses={"support@nimbus-cloud.example"}
     )
     assert result.is_automated
     assert result.reason == "own_address"
 
 def test_own_address_matching_ignores_case_and_spacing():
-    result = automated_sender.check("  Support@PointStar.COM ", own_addresses={"support@pointstar.com"})
+    result = automated_sender.check("  Support@NimbusCloud.COM ", own_addresses={"support@nimbuscloud.com"})
     assert result.is_automated
 
 def test_empty_own_addresses_are_not_treated_as_matches():

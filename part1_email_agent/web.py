@@ -2,15 +2,13 @@ from __future__ import annotations
 
 import asyncio
 from contextlib import asynccontextmanager
-from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Query, UploadFile
-from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from core.config import settings
 from core.logging_config import configure_logging, get_logger
+from core.spa import companion_ports, install_web_ui
 from part1_email_agent import email_loader
 from part1_email_agent import metrics as ticket_metrics
 from part1_email_agent.fetch_jobs import FetchJobRegistry
@@ -41,9 +39,14 @@ async def lifespan(app: FastAPI):
         from seed_db import seed
 
         seed()
-    log.info("startup_loading_agent", llm=settings.llm_backend, embeddings=settings.embedding_backend)
+    log.info("startup_loading_agent", llm=settings.llm_provider, embeddings=settings.embedding_backend)
     _agent = EmailAgent(store=store)
-    log.info("startup_complete", kb_chunks=len(_agent.kb.chunks))
+    log.info(
+        "startup_complete",
+        llm=_agent.llm.name,
+        llm_model=getattr(_agent.llm, "active_model", None),
+        kb_chunks=len(_agent.kb.chunks),
+    )
 
     global _poller
     if settings.poll_enabled:
@@ -58,7 +61,7 @@ async def lifespan(app: FastAPI):
         if _poller:
             await _poller.stop()
 
-app = FastAPI(title="Rega's Support Email Agent", version="1.0.0", lifespan=lifespan)
+app = FastAPI(title="Nimbus Support Email Agent", version="1.0.0", lifespan=lifespan)
 
 class ProcessRequest(BaseModel):
     text: str | None = None
@@ -87,13 +90,15 @@ def health() -> dict:
     return {
         "status": "degraded" if poller_degraded else "ok",
         "llm_backend": agent.llm.name,
+        "llm_model": getattr(agent.llm, "active_model", None),
         "embedding_backend": settings.embedding_backend,
         "kb_documents": sorted(agent.kb.document_ids),
         "kb_chunks": len(agent.kb.chunks),
         "imap_enabled": settings.imap_enabled,
         "smtp_enabled": settings.smtp_enabled,
         "poller": _poller.status() if _poller else {"enabled": False},
-        "companions": {"part2": settings.scraper_port, "part3": settings.chat_port},
+        "companions": companion_ports(),
+        "default_tab": "part1",
     }
 
 @app.get("/api/samples")
@@ -189,20 +194,4 @@ def reply_as_human(trace_id: str, reply: HumanReply) -> dict:
     log.info("human_reply_sent", trace_id=trace_id, to=original.sender, sent=result.sent, reason=result.reason)
     return {"sent": result.sent, "send_status": result.reason, "detail": result.detail}
 
-_dist = Path(__file__).parent / "static" / "dist"
-
-if _dist.is_dir():
-    app.mount("/assets", StaticFiles(directory=_dist / "assets"), name="frontend-assets")
-
-    @app.get("/", response_class=HTMLResponse)
-    def index() -> str:
-        return (_dist / "index.html").read_text(encoding="utf-8")
-
-else:
-    @app.get("/", response_class=HTMLResponse)
-    def index() -> str:
-        return (
-            "<h1>Frontend not built</h1>"
-            "<p>Run <code>npm install &amp;&amp; npm run build</code> in "
-            "<code>part1_email_agent/frontend</code>, then reload.</p>"
-        )
+install_web_ui(app, default_tab="part1")

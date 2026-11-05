@@ -85,7 +85,7 @@ def cmd_samples(args: argparse.Namespace) -> int:
         print(f"No .eml files found in {settings.sample_email_dir}")
         return 1
 
-    pacing_seconds = 4.0 if settings.llm_backend == "gemini" else 0.0
+    pacing_seconds = settings.llm_pacing_seconds
 
     results: list[tuple[str, TicketState]] = []
     for index, (path, incoming) in enumerate(samples):
@@ -168,8 +168,9 @@ def cmd_health(args: argparse.Namespace) -> int:
     from core.rag import KnowledgeBase
 
     report: dict[str, object] = {
-        "llm_backend": settings.llm_backend,
-        "gemini_models": settings.gemini_models if settings.llm_backend == "gemini" else None,
+        "llm_provider": settings.llm_provider,
+        "llm_model": settings.llm_model or None,
+        "llm_fallback_providers": settings.llm_fallback_providers or None,
         "embedding_backend": settings.embedding_backend,
         "imap_enabled": settings.imap_enabled,
         "smtp_enabled": settings.smtp_enabled,
@@ -181,6 +182,7 @@ def cmd_health(args: argparse.Namespace) -> int:
         report["kb_chunks"] = len(kb.chunks)
         report["kb_documents"] = sorted(kb.document_ids)
         llm = build_llm_client(mock_factory=MockLLM)
+        report["llm_provider"] = llm.name
         from part1_email_agent.models import ClassificationResult
 
         probe = llm.generate_structured(
@@ -191,6 +193,7 @@ def cmd_health(args: argparse.Namespace) -> int:
         report["llm"] = f"{llm.name} ok ({probe.category_names})"
         if active:
             report["active_model"] = active
+            report["llm_model"] = active
         report["status"] = "ok"
     except Exception as exc:
         report["status"] = "error"
@@ -200,7 +203,7 @@ def cmd_health(args: argparse.Namespace) -> int:
     return 0 if report.get("status") == "ok" else 1
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(prog="part1_email_agent", description="Rega's Support email agent")
+    parser = argparse.ArgumentParser(prog="part1_email_agent", description="Nimbus Support email agent")
     parser.add_argument("--log-json", action="store_true", help="emit machine-readable logs")
     parser.add_argument("--quiet", action="store_true", help="only warnings and errors")
     sub = parser.add_subparsers(dest="command", required=True)

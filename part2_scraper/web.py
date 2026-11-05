@@ -7,16 +7,15 @@ import time
 from contextlib import asynccontextmanager
 from dataclasses import asdict
 from functools import lru_cache
-from pathlib import Path
 from urllib.parse import urlsplit
 
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
 
 from core.config import settings
 from core.llm import LLMClient, LLMError, build_llm_client
 from core.logging_config import configure_logging, get_logger
+from core.spa import companion_ports, install_web_ui
 from part2_scraper import naive_scraper, pipeline
 from part2_scraper.extractor import ExtractionError
 from part2_scraper.fetcher import FetchError
@@ -32,7 +31,7 @@ async def lifespan(app: FastAPI):
     configure_logging()
     yield
 
-app = FastAPI(title="Scrape & Summarize", version="1.0.0", lifespan=lifespan)
+app = FastAPI(title="TriAgent Lens", version="1.0.0", lifespan=lifespan)
 
 @lru_cache(maxsize=1)
 def get_llm() -> LLMClient:
@@ -74,10 +73,13 @@ def health() -> dict:
     return {
         "status": "ok",
         "llm_backend": get_llm().name,
+        "llm_model": getattr(get_llm(), "active_model", None),
         "summary_max_words": settings.summary_max_words,
         "summary_min_words": settings.summary_min_words,
         "chunk_max_tokens": settings.chunk_max_tokens,
         "map_workers": settings.map_workers,
+        "companions": companion_ports(),
+        "default_tab": "part2",
     }
 
 @app.post("/api/summarize")
@@ -128,6 +130,4 @@ async def compare(request: SummarizeRequest) -> dict:
     log.info("compare_done", url=url, naive_ok=naive["error"] is None, fixed_ok=fixed["error"] is None)
     return {"url": url, "naive": naive, "fixed": fixed}
 
-@app.get("/", response_class=HTMLResponse)
-def index() -> str:
-    return (Path(__file__).parent / "static" / "index.html").read_text(encoding="utf-8")
+install_web_ui(app, default_tab="part2")

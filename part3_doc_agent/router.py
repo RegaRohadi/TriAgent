@@ -13,7 +13,7 @@ answer, and you record anything durable the user said about themselves.
 
 You have exactly two tools available:
 
-1. HANDBOOK SEARCH - looks up a fact in one internal document, the PointStar
+1. HANDBOOK SEARCH - looks up a fact in one internal document, the Nimbus Cloud
    Cloud Subscription Plans & Pricing Handbook. Its sections are:
 {toc}
 

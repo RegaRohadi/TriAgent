@@ -8,5 +8,5 @@ __pycache__
 data/*.db
 data/index_cache
 .cache
-part1_email_agent/frontend/node_modules
-part1_email_agent/static/dist
+frontend/node_modules
+frontend/dist

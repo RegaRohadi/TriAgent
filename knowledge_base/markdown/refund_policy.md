@@ -1,4 +1,4 @@
-# PointStar Cloud Solutions — Refund Policy
+# Nimbus Cloud — Refund Policy
 
 **Document ID:** KB-POLICY-001
 **Version:** 2.0
@@ -6,29 +6,28 @@
 **Owner:** Billing & Customer Success Team
 **Status:** Internal — for customer support reference only
 
-> Note: This is a sample/dummy policy created for the Agentic Architect
-> Challenge. The product categories and vendor relationships reflect
-> PointStar's real, publicly known business (Google Cloud Premier Partner,
-> Oracle NetSuite 5-Star Solution Partner, Cisco Meraki partner, JumpCloud
-> and Zoom reseller — see KB-INFO-000), and the refund terms are modeled on
-> standard industry practice for resellers of these platforms. Specific
-> figures (windows, thresholds) are illustrative, not PointStar's actual
-> legal policy.
+> Note: This is a sample/dummy policy created for the TriAgent demo. Nimbus
+> Cloud is a fictional company; the vendor relationships below (Google Cloud
+> Premier Partner, Oracle NetSuite 5-Star Solution Partner, Cisco Meraki
+> partner, JumpCloud and Zoom reseller — see KB-INFO-000) exist only to make
+> the scenario realistic. The refund terms are modeled on standard industry
+> practice for resellers of these platforms. Specific figures (windows,
+> thresholds) are illustrative and are not a real legal policy.
 
 ## 1. Scope
 
 This policy governs refunds for subscriptions and services billed directly
-by PointStar (Pte. Ltd. / Consulting Sdn Bhd / PT PointStar), across the
+by Nimbus Cloud (Pte. Ltd. / Consulting Sdn Bhd / PT Nimbus Cloud), across the
 following categories:
 
-- Cloud subscriptions resold by PointStar: **Google Workspace**, **Google
+- Cloud subscriptions resold by Nimbus Cloud: **Google Workspace**, **Google
   Workspace for Education**, **Google Cloud Platform (GCP)** usage,
   **Oracle NetSuite**, **JumpCloud**, **Zoom**, **Cisco Meraki**.
 - **Professional Services**: implementation, migration, consulting,
-  managed services delivered by PointStar's own team.
+  managed services delivered by Nimbus Cloud's own team.
 
 It does not cover charges billed directly by the vendor to the customer
-outside of a PointStar reseller agreement — those follow the vendor's own
+outside of a Nimbus Cloud reseller agreement — those follow the vendor's own
 terms (e.g. Google's direct billing terms, Oracle's direct NetSuite MSA).
 
 ## 2. Refund Terms by Product Category
@@ -97,7 +96,7 @@ refund outcome, and must escalate to a human Billing Specialist, when:
 
 Refunds are issued to the original payment method only, within 5–10
 business days of approval; bank processing may add 3–5 additional business
-days. PointStar does not issue cash or store-credit refunds.
+days. Nimbus Cloud does not issue cash or store-credit refunds.
 
 ## 8. How Customers Request a Refund
 

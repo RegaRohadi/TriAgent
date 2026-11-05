@@ -3,7 +3,7 @@ from __future__ import annotations
 from part2_scraper.chunker import CHARS_PER_TOKEN, chunk_text, estimate_tokens
 
 PARAGRAPH = (
-    "PointStar resells Google Workspace, Google Cloud Platform and Oracle NetSuite. "
+    "Nimbus Cloud resells Google Workspace, Google Cloud Platform and Oracle NetSuite. "
     "Refund terms differ by product, so the applicable clause depends on the subscription. "
 )
 

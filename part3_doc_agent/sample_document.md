@@ -1,4 +1,4 @@
-# PointStar — Cloud Subscription Plans & Pricing Handbook
+# Nimbus Cloud — Cloud Subscription Plans & Pricing Handbook
 
 **Document ID:** KB-PLAN-100
 **Version:** 2.4
@@ -6,9 +6,9 @@
 **Owner:** Revenue Operations
 **Category:** Commercial Reference
 
-> ILLUSTRATIVE DOCUMENT. PointStar is a real company, but every figure in this
-> handbook is invented for a technical exercise. Nothing here is a real price,
-> a real service level, or a real contractual term. It exists to give a
+> ILLUSTRATIVE DOCUMENT. Nimbus Cloud is a fictional company, and every figure
+> in this handbook is invented for a technical exercise. Nothing here is a real
+> price, a real service level, or a real contractual term. It exists to give a
 > document-grounded agent a single, self-contained source of truth to answer
 > from.
 
@@ -16,7 +16,7 @@
 
 This handbook is the single source of truth for standard subscription pricing,
 billing mechanics, storage limits, support targets and refund terms for
-PointStar-managed cloud subscriptions sold in Singapore, Malaysia and
+Nimbus Cloud-managed cloud subscriptions sold in Singapore, Malaysia and
 Indonesia. It covers list pricing only. Negotiated enterprise agreements,
 public-sector tenders and education pricing are governed by their own contract
 schedules and are explicitly out of scope for this document.

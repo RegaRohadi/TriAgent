@@ -23,14 +23,16 @@ def _env_bool(name: str, default: bool) -> bool:
 
 @dataclass(frozen=True)
 class Settings:
-    gemini_api_key: str = field(default_factory=lambda: os.getenv("GEMINI_API_KEY", "").strip())
-    gemini_model: str = field(default_factory=lambda: os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite").strip())
-    gemini_model_fallbacks: str = field(
-        default_factory=lambda: os.getenv(
-            "GEMINI_MODEL_FALLBACKS",
-            "gemini-3.1-flash-lite,gemini-3.8-flash,gemini-3.7-flash,gemini-3.5-flash,gemini-3-flash",
-        ).strip()
+    llm_provider: str = field(
+        default_factory=lambda: (os.getenv("LLM_PROVIDER") or os.getenv("LLM_BACKEND") or "auto")
+        .strip()
+        .lower()
     )
+    llm_model: str = field(default_factory=lambda: os.getenv("LLM_MODEL", "").strip())
+    llm_fallback_providers: str = field(
+        default_factory=lambda: os.getenv("LLM_FALLBACK_PROVIDERS", "").strip()
+    )
+    llm_pacing_seconds: float = field(default_factory=lambda: _env_float("LLM_PACING_SECONDS", 0.0))
 
     embedding_backend: str = field(
         default_factory=lambda: os.getenv("EMBEDDING_BACKEND", "sentence-transformers").strip()
@@ -86,6 +88,7 @@ class Settings:
     chat_retrieval_top_k: int = field(default_factory=lambda: _env_int("CHAT_RETRIEVAL_TOP_K", 6))
     chat_retrieval_min_score: float = field(default_factory=lambda: _env_float("CHAT_RETRIEVAL_MIN_SCORE", 0.25))
 
+    app_port: int = field(default_factory=lambda: _env_int("APP_PORT", 8000))
     scraper_port: int = field(default_factory=lambda: _env_int("SCRAPER_PORT", 8002))
     chat_port: int = field(default_factory=lambda: _env_int("CHAT_PORT", 8001))
 
@@ -97,20 +100,13 @@ class Settings:
     smtp_user: str = field(default_factory=lambda: os.getenv("SMTP_USER", "").strip())
     smtp_password: str = field(default_factory=lambda: os.getenv("SMTP_PASSWORD", "").strip())
     smtp_from_address: str = field(default_factory=lambda: os.getenv("SMTP_FROM_ADDRESS", "").strip())
-    smtp_from_name: str = field(default_factory=lambda: os.getenv("SMTP_FROM_NAME", "Rega's Support").strip())
-
-    @property
-    def gemini_models(self) -> list[str]:
-        names = [self.gemini_model, *(m.strip() for m in self.gemini_model_fallbacks.split(","))]
-        seen: set[str] = set()
-        return [n for n in names if n and not (n in seen or seen.add(n))]
+    smtp_from_name: str = field(default_factory=lambda: os.getenv("SMTP_FROM_NAME", "Nimbus Support").strip())
 
     @property
     def llm_backend(self) -> str:
-        explicit = os.getenv("LLM_BACKEND", "").strip().lower()
-        if explicit:
-            return explicit
-        return "gemini" if self.gemini_api_key else "mock"
+        """Backward-compatible name for the configured provider selector."""
+
+        return self.llm_provider
 
     @property
     def imap_enabled(self) -> bool:

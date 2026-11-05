@@ -1,4 +1,6 @@
 .env
+.env.*
+!.env.example
 __pycache__/
 *.py[cod]
 .pytest_cache/
@@ -10,5 +12,5 @@ data/part3_sessions/
 .cache/
 *.egg-info/
 .DS_Store
-part1_email_agent/frontend/node_modules/
-part1_email_agent/static/dist/
+frontend/node_modules/
+frontend/dist/

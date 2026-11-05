@@ -83,4 +83,4 @@ def test_the_page_is_served(client):
     response = client.get("/")
 
     assert response.status_code == 200
-    assert "PointStar Document Agent" in response.text
+    assert "TriAgent" in response.text

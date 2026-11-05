@@ -1,8 +1,8 @@
 services:
   agent:
     build: .
-    image: pointstar-email-agent
-    container_name: pointstar-email-agent
+    image: triagent-email-agent
+    container_name: triagent-email-agent
     ports:
       - "${APP_PORT:-8000}:8000"
     env_file:
@@ -15,8 +15,8 @@ services:
 
   chat:
     build: .
-    image: pointstar-email-agent
-    container_name: pointstar-doc-agent
+    image: triagent-email-agent
+    container_name: triagent-doc-agent
     command: ["uvicorn", "part3_doc_agent.web:app", "--host", "0.0.0.0", "--port", "8000"]
     ports:
       - "${CHAT_PORT:-8001}:8000"
@@ -36,8 +36,8 @@ services:
 
   scraper:
     build: .
-    image: pointstar-email-agent
-    container_name: pointstar-scraper
+    image: triagent-email-agent
+    container_name: triagent-scraper
     command: ["uvicorn", "part2_scraper.web:app", "--host", "0.0.0.0", "--port", "8000"]
     ports:
       - "${SCRAPER_PORT:-8002}:8000"
