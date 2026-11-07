@@ -9,7 +9,8 @@ import { DecisionTrace, KnowledgeBaseContext } from "./DecisionTrace.jsx";
 import { PipelineFlow } from "./PipelineFlow.jsx";
 import { NOTE_TONE, STATUS_COLOR, STATUS_LABEL } from "../constants.js";
 
-const PRE = "whitespace-pre-wrap rounded-xl bg-background-secondary-default p-3 font-mono text-body-2-regular text-text-primary";
+const PRE =
+  "whitespace-pre-wrap break-words rounded-xl border border-line bg-surface-2 p-3 font-mono text-[11.5px] leading-relaxed text-ink";
 
 export function TicketDetail({ ticket, onReplySent }) {
   const p = ticket.payload || {};
@@ -47,20 +48,18 @@ export function TicketDetail({ ticket, onReplySent }) {
       <Card>
         <CardHeader>
           <CardTitle>Ticket</CardTitle>
+          <Chip variant="caption" color={STATUS_COLOR[ticket.status]}>
+            {STATUS_LABEL[ticket.status] || ticket.status}
+          </Chip>
         </CardHeader>
         <CardContent className="flex flex-col gap-2">
-          <p className="flex flex-wrap items-center gap-2">
-            <Chip variant="caption" color={STATUS_COLOR[ticket.status]}>
-              {STATUS_LABEL[ticket.status] || ticket.status}
-            </Chip>
-            <span className="font-mono text-caption-1-regular text-text-secondary">
-              trace_id={ticket.trace_id} · {ticket.created_at}
-            </span>
+          <p className="font-mono text-[10.5px] break-all text-ink-faint">
+            trace_id={ticket.trace_id} · {ticket.created_at}
           </p>
-          <p className="font-mono text-caption-1-regular text-text-secondary">
+          <p className="font-mono text-[10.5px] leading-relaxed break-words text-ink-faint">
             from {ticket.customer_email} · reason: <code>{ticket.route_reason || "-"}</code> · priority: {ticket.priority}
           </p>
-          <h3 className="mt-2 text-body-semibold text-text-primary">Customer email</h3>
+          <h3 className="mt-2 text-[12px] font-semibold text-ink-soft">Customer email</h3>
           <pre className={PRE}>{(email.subject ? `Subject: ${email.subject}\n\n` : "") + (email.body || "")}</pre>
         </CardContent>
       </Card>
@@ -72,7 +71,7 @@ export function TicketDetail({ ticket, onReplySent }) {
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
             {draft && (
-              <p className="text-caption-1-regular text-text-secondary">
+              <p className="text-[10.5px] leading-relaxed text-ink-faint">
                 Pre-filled with the draft the agent produced but did not send. Edit before sending.
               </p>
             )}
@@ -81,7 +80,9 @@ export function TicketDetail({ ticket, onReplySent }) {
               Send reply to {email.sender || ""}
             </Button>
             {replyStatus && (
-              <p className={`text-caption-1-regular ${NOTE_TONE[replyStatus.kind] || NOTE_TONE.note}`}>{replyStatus.text}</p>
+              <p className={`text-[11px] leading-relaxed ${NOTE_TONE[replyStatus.kind] || NOTE_TONE.note}`}>
+                {replyStatus.text}
+              </p>
             )}
           </CardContent>
         </Card>
@@ -93,8 +94,9 @@ export function TicketDetail({ ticket, onReplySent }) {
             <CardTitle>Reply that was sent</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-2">
-            <p className="font-mono text-caption-1-regular text-text-secondary">
-              by <b>{ticket.replied_by || "?"}</b> · {ticket.replied_at || ""} · delivery: <code>{ticket.send_status || "n/a"}</code>
+            <p className="font-mono text-[10.5px] leading-relaxed break-words text-ink-faint">
+              by <b>{ticket.replied_by || "?"}</b> · {ticket.replied_at || ""} · delivery:{" "}
+              <code>{ticket.send_status || "n/a"}</code>
             </p>
             <pre className={PRE}>{ticket.reply_text}</pre>
           </CardContent>

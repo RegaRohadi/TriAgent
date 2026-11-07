@@ -1,12 +1,11 @@
-import { useEffect, useRef, useState } from "react";
-import { DEFAULT_TAB, PORTS } from "../backend.js";
-import { TABS, validTab } from "../constants.js";
+import { useEffect, useState } from "react";
+import { DEFAULT_TAB } from "../backend.js";
+import { validTab } from "../constants.js";
 
 export function useTabs() {
   const [tab, setTab] = useState(() =>
     validTab(location.hash.slice(1), validTab(DEFAULT_TAB, "part1")),
   );
-  const headerRef = useRef(null);
 
   useEffect(() => {
     const hash = `#${tab}`;
@@ -19,16 +18,5 @@ export function useTabs() {
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
 
-  useEffect(() => {
-    function syncHeaderHeight() {
-      if (headerRef.current) {
-        document.documentElement.style.setProperty("--header-h", `${headerRef.current.offsetHeight}px`);
-      }
-    }
-    syncHeaderHeight();
-    window.addEventListener("resize", syncHeaderHeight);
-    return () => window.removeEventListener("resize", syncHeaderHeight);
-  }, [tab]);
-
-  return { tab, setTab, tabs: TABS, ports: PORTS, headerRef };
+  return { tab, setTab };
 }

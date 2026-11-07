@@ -14,10 +14,19 @@ import { Chip } from "@/components/base/badges/chip";
 import { Input, InputBase, TextField } from "@/components/base/input/input";
 import { Label } from "@/components/base/input/label";
 import { Spinner } from "@/components/base/spinner/spinner";
+import { EmptyState } from "./EmptyState.jsx";
+import { PageHeader, StatusBadge } from "./PageHeader.jsx";
 
 const EXAMPLES = [
   ["Wikipedia · RAG", "https://en.wikipedia.org/wiki/Retrieval-augmented_generation"],
   ["Wikipedia · Web scraping", "https://en.wikipedia.org/wiki/Web_scraping"],
+];
+
+const STEPS = [
+  "Fetch the URL with a timeout and content-type check.",
+  "Strip navigation, scripts, and chrome.",
+  "Map each chunk through the model, then reduce.",
+  "Enforce the word budget and rewrite if needed.",
 ];
 
 const fmt = (n) => Number(n || 0).toLocaleString("en-US");
@@ -26,11 +35,11 @@ const secs = (ms) => `${((ms || 0) / 1000).toFixed(1)} s`;
 
 function MetricRow({ label, children }) {
   return (
-    <tr className="border-b border-border-button-default last:border-0">
-      <th className="w-[34%] px-2 py-2 text-left align-top text-caption-1-medium text-text-secondary">
+    <tr className="border-b border-line last:border-0">
+      <th className="w-[36%] px-2 py-2 text-left align-top text-[10.5px] font-semibold tracking-wide text-ink-faint uppercase">
         {label}
       </th>
-      <td className="px-2 py-2 align-top text-body-2-regular text-text-primary">{children}</td>
+      <td className="px-2 py-2 align-top text-[12px] leading-relaxed text-ink-soft">{children}</td>
     </tr>
   );
 }
@@ -41,7 +50,7 @@ function MetricsTable({ result }) {
     <table className="w-full border-collapse">
       <tbody>
         <MetricRow label="Fetched">{fmt(result.raw_bytes)} bytes</MetricRow>
-        <MetricRow label="Sent to the model">
+        <MetricRow label="Sent to model">
           {fmt(result.extracted_chars)} chars — {pct(smaller)} smaller than the raw page
         </MetricRow>
         <MetricRow label="Extraction">
@@ -71,22 +80,22 @@ function SummaryBlock({ result, budget }) {
         href={result.url}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-1 text-body-medium text-accent-600 hover:underline"
+        className="inline-flex items-center gap-1 text-[13px] font-semibold break-words text-brand hover:underline"
       >
         {result.title}
-        <RiArrowRightUpLine className="size-4" aria-hidden />
+        <RiArrowRightUpLine className="size-4 shrink-0" aria-hidden />
       </a>
       <div className="flex flex-wrap items-center gap-2">
-        <Chip color={result.within_budget ? "lime" : "rose"}>{result.word_count} / {budget} words</Chip>
-        <span className="rounded-md bg-background-secondary-default px-1.5 py-0.5 text-caption-1-medium text-text-secondary">
+        <Chip color={result.within_budget ? "lime" : "rose"}>
+          {result.word_count} / {budget} words
+        </Chip>
+        <span className="rounded-md bg-surface-2 px-1.5 py-0.5 text-[10px] font-semibold text-ink-faint">
           enforced by: {result.guardrail_enforced_by}
         </span>
       </div>
-      <p className="whitespace-pre-wrap text-body-regular leading-relaxed text-text-primary">
-        {result.summary}
-      </p>
+      <p className="whitespace-pre-wrap text-[12.5px] leading-relaxed text-ink-soft">{result.summary}</p>
       {result.key_points?.length ? (
-        <ul className="list-disc space-y-1 pl-5 text-body-regular text-text-primary">
+        <ul className="list-disc space-y-1 pl-5 text-[12px] leading-relaxed text-ink-soft">
           {result.key_points.map((point) => (
             <li key={point}>{point}</li>
           ))}
@@ -101,6 +110,9 @@ function SummaryCard({ result, budget }) {
     <Card>
       <CardHeader>
         <CardTitle>Summary</CardTitle>
+        <Chip variant="caption" color="blue">
+          {result.word_count} words
+        </Chip>
       </CardHeader>
       <CardContent>
         <SummaryBlock result={result} budget={budget} />
@@ -124,10 +136,10 @@ function MetricsCard({ result }) {
 
 function Failure({ title, elapsed, error }) {
   return (
-    <div className="flex flex-col gap-1 rounded-r-xl border-l-2 border-status-rose-text bg-status-rose-background p-3 text-body-2-regular text-text-primary">
-      <strong>{title}</strong>
-      {elapsed ? <span className="text-caption-1-regular text-text-secondary">after {secs(elapsed)}</span> : null}
-      <code className="whitespace-pre-wrap break-words font-mono text-caption-1-regular">{error}</code>
+    <div className="flex flex-col gap-1 rounded-xl border border-danger/25 bg-danger-soft p-3 text-[12px] leading-relaxed text-ink">
+      <strong className="text-danger">{title}</strong>
+      {elapsed ? <span className="text-[10.5px] text-ink-faint">after {secs(elapsed)}</span> : null}
+      <code className="font-mono text-[10.5px] break-words">{error}</code>
     </div>
   );
 }
@@ -141,6 +153,9 @@ function CompareView({ data, budget }) {
       <Card>
         <CardHeader>
           <CardTitle>Before — naive_scraper.py</CardTitle>
+          <Chip variant="caption" color="rose">
+            no guardrail
+          </Chip>
         </CardHeader>
         <CardContent className="flex flex-col gap-3">
           {naive.error ? (
@@ -148,17 +163,17 @@ function CompareView({ data, budget }) {
           ) : (
             <>
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-md bg-background-secondary-default px-1.5 py-0.5 text-caption-1-medium text-text-secondary">
+                <span className="rounded-md bg-surface-2 px-1.5 py-0.5 text-[10px] font-semibold text-ink-faint">
                   {naive.word_count} words · no length check
                 </span>
-                <span className="rounded-md bg-background-secondary-default px-1.5 py-0.5 text-caption-1-medium text-text-secondary">
+                <span className="rounded-md bg-surface-2 px-1.5 py-0.5 text-[10px] font-semibold text-ink-faint">
                   {secs(naive.elapsed_ms)}
                 </span>
               </div>
-              <p className="whitespace-pre-wrap text-body-regular leading-relaxed">{naive.summary}</p>
+              <p className="whitespace-pre-wrap text-[12px] leading-relaxed text-ink-soft">{naive.summary}</p>
             </>
           )}
-          <p className="text-caption-1-regular text-text-secondary">
+          <p className="text-[10.5px] leading-relaxed text-ink-faint">
             No timeout, no status or content-type check, the whole DOM in one prompt, no length check.
             A fluent summary here is not proof it read the right page.
           </p>
@@ -168,6 +183,9 @@ function CompareView({ data, budget }) {
       <Card>
         <CardHeader>
           <CardTitle>After — pipeline.py</CardTitle>
+          <Chip variant="caption" color="lime">
+            guarded
+          </Chip>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           {fixed.error ? (
@@ -184,28 +202,21 @@ function CompareView({ data, budget }) {
   );
 }
 
-function EmptyCard({ children }) {
-  return (
-    <Card>
-      <CardContent className="italic text-text-secondary">{children}</CardContent>
-    </Card>
-  );
-}
-
 function UnavailableCard({ onRetry }) {
   return (
     <Card>
       <CardHeader>
         <CardTitle>Lens is not running</CardTitle>
+        <StatusBadge tone="danger">Offline</StatusBadge>
       </CardHeader>
       <CardContent className="flex flex-col items-start gap-3">
         <p>
-          Nothing answered at <code className="font-mono">{apiBase("part2")}</code>. Start it with:
+          Nothing answered at <code className="font-mono text-[11px]">{apiBase("part2")}</code>. Start it with:
         </p>
-        <pre className="w-full rounded-xl bg-background-secondary-default p-3 font-mono text-body-2-regular">
+        <pre className="w-full overflow-x-auto rounded-xl border border-line bg-surface-2 p-3 font-mono text-[11px] text-ink">
           docker compose up -d scraper
         </pre>
-        <p className="text-caption-1-regular text-text-secondary">
+        <p className="text-[10.5px] leading-relaxed text-ink-faint">
           Without Docker: <code className="font-mono">uvicorn part2_scraper.web:app --port 8002</code>
         </p>
         <Button variant="secondary" size="small" leadingIcon={RiRefreshLine} onClick={onRetry}>
@@ -214,6 +225,12 @@ function UnavailableCard({ onRetry }) {
       </CardContent>
     </Card>
   );
+}
+
+function healthBadge(health) {
+  if (health.status === "loading") return <StatusBadge tone="neutral">Connecting…</StatusBadge>;
+  if (health.status === "up") return <StatusBadge tone="success">Lens online</StatusBadge>;
+  return <StatusBadge tone="danger">Lens offline</StatusBadge>;
 }
 
 export function PartTwoPanel({ active }) {
@@ -283,7 +300,11 @@ export function PartTwoPanel({ active }) {
           ? await api2.compare({ url: trimmed, max_words: maxWords })
           : await api2.summarize({ url: trimmed, max_words: maxWords });
       stopTicker();
-      setOut({ kind: mode, data, budget: maxWords ?? health.data?.summary_max_words ?? "" });
+      setOut({
+        kind: mode === "compare" ? "compare" : "summary",
+        data,
+        budget: maxWords ?? health.data?.summary_max_words ?? "",
+      });
     } catch (error) {
       stopTicker();
       setOut({ kind: "error", message: error.message });
@@ -299,12 +320,15 @@ export function PartTwoPanel({ active }) {
           <Card>
             <CardHeader>
               <CardTitle>{out.mode === "compare" ? "Comparing before and after" : "Summarizing"}</CardTitle>
+              <Chip variant="caption" color="blue">
+                {elapsed} s
+              </Chip>
             </CardHeader>
             <CardContent className="flex flex-col gap-2">
-              <span className="flex items-center gap-2 text-text-primary">
-                <Spinner /> Working… {elapsed} s
+              <span className="flex items-center gap-2 text-ink">
+                <Spinner /> Working…
               </span>
-              <p className="text-caption-1-regular text-text-secondary">
+              <p className="text-[10.5px] leading-relaxed text-ink-faint">
                 Fetch → extract → one model call per chunk → merge → length check. With a live model
                 this usually takes 10–60 s.
               </p>
@@ -325,6 +349,7 @@ export function PartTwoPanel({ active }) {
           <Card>
             <CardHeader>
               <CardTitle>Could not summarize</CardTitle>
+              <StatusBadge tone="danger">Failed</StatusBadge>
             </CardHeader>
             <CardContent>
               <Failure title="Request failed" error={out.message} />
@@ -332,91 +357,128 @@ export function PartTwoPanel({ active }) {
           </Card>
         );
       default:
-        return <EmptyCard>Enter a URL, or pick an example.</EmptyCard>;
+        return (
+          <Card className="p-4 md:p-5">
+            <EmptyState
+              icon={RiGlobalLine}
+              title="Give Lens a page to read"
+              description="Paste a public URL, choose a word budget, and run. The summary, the pipeline metrics, and an optional before/after comparison will show up here."
+            />
+          </Card>
+        );
     }
   }
 
+  const healthMeta =
+    health.status === "up"
+      ? `llm: ${health.data.llm_backend}${health.data.llm_model ? `/${health.data.llm_model}` : ""} · chunks of ${
+          health.data.chunk_max_tokens
+        } tokens · ${health.data.map_workers} parallel map calls`
+      : undefined;
+
   return (
-    <section
-      hidden={!active}
-      className="grid grid-cols-1 items-start gap-5 p-6 lg:grid-cols-[minmax(320px,420px)_1fr]"
-    >
-      <div className="flex flex-col gap-4">
-        <Card>
-          <CardHeader>
-            <CardTitle>Page to summarize</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-4">
-            <Input
-              label="URL"
-              placeholder="https://en.wikipedia.org/wiki/…"
-              leadingIcon={RiGlobalLine}
-              value={url}
-              onChange={setUrl}
-              autoComplete="off"
-            />
+    <section hidden={!active} className="fade-up flex flex-col gap-6">
+      <PageHeader
+        eyebrow="Lens · scrape & summarize"
+        title="Read the page, not the chrome."
+        description="Fetches a URL, strips navigation, maps chunks through the model, and enforces a word budget — with a before/after comparison against a naive scraper."
+        meta={healthMeta}
+        actions={healthBadge(health)}
+      />
 
-            <div className="flex flex-wrap gap-1">
-              {EXAMPLES.map(([label, example]) => (
-                <Button
-                  key={label}
-                  variant="ghost"
-                  size="small"
-                  onClick={() => setUrl(example)}
-                  className="text-text-secondary"
+      <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(320px,380px)_minmax(0,1fr)]">
+        <div className="contents min-w-0 xl:flex xl:flex-col xl:gap-4">
+          <div className="order-1 min-w-0">
+            <Card>
+              <CardHeader>
+                <CardTitle>Page to summarize</CardTitle>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-4">
+                <Input
+                  label="URL"
+                  placeholder="https://en.wikipedia.org/wiki/…"
+                  leadingIcon={RiGlobalLine}
+                  value={url}
+                  onChange={setUrl}
+                  autoComplete="off"
+                />
+
+                <div className="flex flex-wrap gap-1">
+                  {EXAMPLES.map(([label, example]) => (
+                    <Button
+                      key={label}
+                      variant="ghost"
+                      size="xs"
+                      onClick={() => setUrl(example)}
+                      className="text-ink-soft"
+                    >
+                      {label}
+                    </Button>
+                  ))}
+                </div>
+
+                <TextField
+                  value={budget}
+                  onChange={setBudget}
+                  isDisabled={health.status !== "up"}
+                  className="w-full"
                 >
-                  {label}
-                </Button>
-              ))}
-            </div>
+                  <Label>Word budget</Label>
+                  <InputBase inputMode="numeric" placeholder="100" />
+                </TextField>
 
-            <TextField
-              value={budget}
-              onChange={setBudget}
-              isDisabled={health.status !== "up"}
-              className="w-full"
-            >
-              <Label>Word budget</Label>
-              <InputBase inputMode="numeric" placeholder="100" />
-            </TextField>
+                <div className="flex flex-col gap-2">
+                  <Button
+                    leadingIcon={RiPlayLine}
+                    onClick={() => runJob("summarize")}
+                    disabled={busy || health.status !== "up" || !url.trim()}
+                    className="w-full"
+                  >
+                    Summarize
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    leadingIcon={RiContrastLine}
+                    onClick={() => runJob("compare")}
+                    disabled={busy || health.status !== "up" || !url.trim()}
+                    className="w-full"
+                  >
+                    Compare before / after
+                  </Button>
+                </div>
 
-            <div className="flex flex-wrap gap-2">
-              <Button
-                leadingIcon={RiPlayLine}
-                onClick={() => runJob("summarize")}
-                disabled={busy || health.status !== "up" || !url.trim()}
-              >
-                Summarize
-              </Button>
-              <Button
-                variant="secondary"
-                leadingIcon={RiContrastLine}
-                onClick={() => runJob("compare")}
-                disabled={busy || health.status !== "up" || !url.trim()}
-              >
-                Compare before / after
-              </Button>
-            </div>
+                <p className="text-[10.5px] leading-relaxed text-ink-faint">
+                  Compare runs <code className="font-mono">naive_scraper.py</code> and the fixed pipeline on
+                  the same page, side by side.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
 
-            <p className="text-caption-1-regular text-text-secondary">
-              Compare runs <code className="font-mono">naive_scraper.py</code> and the fixed pipeline
-              on the same page, side by side.
-            </p>
+          <div className="order-3 min-w-0">
+            <Card>
+              <CardHeader>
+                <CardTitle>What happens</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ol className="space-y-2.5">
+                  {STEPS.map((step, index) => (
+                    <li key={step} className="flex gap-2.5 text-[11px] leading-relaxed text-ink-soft">
+                      <span className="mt-0.5 grid size-4 shrink-0 place-items-center rounded-full bg-surface-2 text-[9px] font-bold text-ink-faint">
+                        {index + 1}
+                      </span>
+                      {step}
+                    </li>
+                  ))}
+                </ol>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
 
-            {health.status === "up" ? (
-              <p className="text-caption-1-regular text-text-secondary">
-                llm: {health.data.llm_backend}
-                {health.data.llm_model ? `/${health.data.llm_model}` : ""} · chunks of{" "}
-                {health.data.chunk_max_tokens} tokens ·{" "}
-                {health.data.map_workers} parallel map calls
-              </p>
-            ) : null}
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="flex min-w-0 flex-col gap-4">
-        {health.status === "down" ? <UnavailableCard onRetry={loadHealth} /> : renderOutput()}
+        <div className="order-2 flex min-w-0 flex-col gap-4">
+          {health.status === "down" ? <UnavailableCard onRetry={loadHealth} /> : renderOutput()}
+        </div>
       </div>
     </section>
   );

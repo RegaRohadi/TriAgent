@@ -7,6 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/base/card
 import { Chip } from "@/components/base/badges/chip";
 import { InputBase, TextField } from "@/components/base/input/input";
 import { Spinner } from "@/components/base/spinner/spinner";
+import { EmptyState } from "./EmptyState.jsx";
+import { PageHeader, StatusBadge } from "./PageHeader.jsx";
 
 const SESSION_KEY = "triagent_session_id";
 
@@ -40,14 +42,20 @@ function sessionId() {
 function Bubble({ message }) {
   const user = message.role === "user";
   return (
-    <div className={user ? "flex max-w-[82%] flex-col items-end gap-1.5 self-end" : "flex max-w-[82%] flex-col gap-1.5 self-start"}>
+    <div
+      className={
+        user
+          ? "flex max-w-[86%] flex-col items-end gap-1.5 self-end sm:max-w-[78%]"
+          : "flex max-w-[86%] flex-col gap-1.5 self-start sm:max-w-[78%]"
+      }
+    >
       <div
         className={[
-          "whitespace-pre-wrap px-3.5 py-2.5 text-body-regular",
+          "min-w-0 rounded-2xl px-3.5 py-2.5 text-[12.5px] leading-relaxed break-words whitespace-pre-wrap",
           user
-            ? "rounded-2xl rounded-br-md bg-accent-600 text-text-white"
-            : "rounded-2xl rounded-bl-md bg-background-secondary-default text-text-primary",
-          message.pending ? "italic text-text-secondary" : "",
+            ? "rounded-br-md bg-brand text-white"
+            : "rounded-bl-md border border-line bg-surface-2 text-ink",
+          message.pending ? "text-ink-faint italic" : "",
         ].join(" ")}
       >
         {message.content}
@@ -61,36 +69,42 @@ function DetailRow({ term, value }) {
   if (!value) return null;
   return (
     <>
-      <dt className="font-semibold text-text-secondary">{term}</dt>
-      <dd className="break-words font-mono text-caption-1-regular">{value}</dd>
+      <dt className="font-semibold text-ink-faint">{term}</dt>
+      <dd className="min-w-0 font-mono text-[10px] leading-relaxed break-words">{value}</dd>
     </>
   );
 }
 
 function AnswerMeta({ data }) {
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="flex min-w-0 flex-col gap-1.5">
       <div className="flex flex-wrap items-center gap-1.5">
         {data.tools_used.length === 0 ? (
-          <Chip color="lime" variant="caption">no tools needed</Chip>
+          <Chip color="lime" variant="caption">
+            no tools needed
+          </Chip>
         ) : (
           data.tools_used.map((tool) => (
-            <Chip key={tool} color="blue" variant="caption">{tool}</Chip>
+            <Chip key={tool} color="blue" variant="caption">
+              {tool}
+            </Chip>
           ))
         )}
         {!data.fully_answerable ? (
-          <Chip color="yellow" variant="caption">not fully in the handbook</Chip>
+          <Chip color="yellow" variant="caption">
+            not fully in the handbook
+          </Chip>
         ) : null}
         {data.citations.map((citation) => (
-          <code key={citation} className="font-mono text-caption-1-regular text-text-secondary">
+          <code key={citation} className="font-mono text-[10px] break-all text-ink-faint">
             {citation}
           </code>
         ))}
       </div>
 
-      <details className="text-caption-1-regular text-text-secondary">
-        <summary className="cursor-pointer font-medium text-accent-600">why this happened</summary>
-        <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1">
+      <details className="min-w-0 text-[10.5px] text-ink-faint">
+        <summary className="cursor-pointer font-semibold text-brand">why this happened</summary>
+        <dl className="mt-2 grid min-w-0 grid-cols-[auto_1fr] gap-x-3 gap-y-1">
           <DetailRow term="routing" value={data.routing_reason} />
           <DetailRow term="queries" value={data.queries?.join("  |  ")} />
           <DetailRow
@@ -125,18 +139,21 @@ function MemoryCard({ memory, onForget, busy }) {
     <Card>
       <CardHeader>
         <CardTitle>What I remember</CardTitle>
+        <Chip variant="caption" color="neutral">
+          {keys.length} note{keys.length === 1 ? "" : "s"}
+        </Chip>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
         {keys.length === 0 ? (
-          <p className="text-body-2-regular text-text-secondary">
+          <p className="text-[11.5px] leading-relaxed text-ink-faint">
             You have not told me anything about yourself yet.
           </p>
         ) : (
-          <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 text-body-2-regular">
+          <dl className="grid min-w-0 grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 text-[11.5px]">
             {keys.map((key) => (
               <div key={key} className="contents">
-                <dt className="text-text-secondary">{key.replace(/_/g, " ")}</dt>
-                <dd className="font-semibold text-text-primary">{memory[key]}</dd>
+                <dt className="text-ink-faint">{key.replace(/_/g, " ")}</dt>
+                <dd className="min-w-0 font-semibold break-words text-ink">{memory[key]}</dd>
               </div>
             ))}
           </dl>
@@ -163,8 +180,8 @@ function SourceCard({ health }) {
         <CardTitle>Source document</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-2">
-        <p className="text-caption-1-regular text-text-secondary">{health?.document || "—"}</p>
-        <ul className="list-disc space-y-1 pl-4 text-caption-1-regular text-text-secondary">
+        <p className="text-[10.5px] leading-relaxed break-words text-ink-faint">{health?.document || "—"}</p>
+        <ul className="list-disc space-y-1 pl-4 text-[10.5px] leading-relaxed text-ink-faint">
           {(health?.sections || []).map((section) => (
             <li key={section}>{section.replace(/^-\s*/, "")}</li>
           ))}
@@ -179,15 +196,16 @@ function UnavailableCard({ onRetry }) {
     <Card>
       <CardHeader>
         <CardTitle>Docs is not running</CardTitle>
+        <StatusBadge tone="danger">Offline</StatusBadge>
       </CardHeader>
       <CardContent className="flex flex-col items-start gap-3">
         <p>
-          Nothing answered at <code className="font-mono">{apiBase("part3")}</code>. Start it with:
+          Nothing answered at <code className="font-mono text-[11px]">{apiBase("part3")}</code>. Start it with:
         </p>
-        <pre className="w-full rounded-xl bg-background-secondary-default p-3 font-mono text-body-2-regular">
+        <pre className="w-full overflow-x-auto rounded-xl border border-line bg-surface-2 p-3 font-mono text-[11px] text-ink">
           docker compose up -d chat
         </pre>
-        <p className="text-caption-1-regular text-text-secondary">
+        <p className="text-[10.5px] leading-relaxed text-ink-faint">
           Without Docker: <code className="font-mono">uvicorn part3_doc_agent.web:app --port 8001</code>
         </p>
         <Button variant="secondary" size="small" leadingIcon={RiRefreshLine} onClick={onRetry}>
@@ -196,6 +214,12 @@ function UnavailableCard({ onRetry }) {
       </CardContent>
     </Card>
   );
+}
+
+function healthBadge(health) {
+  if (health.status === "loading") return <StatusBadge tone="neutral">Connecting…</StatusBadge>;
+  if (health.status === "up") return <StatusBadge tone="success">Docs online</StatusBadge>;
+  return <StatusBadge tone="danger">Docs offline</StatusBadge>;
 }
 
 export function PartThreePanel({ active }) {
@@ -274,108 +298,133 @@ export function PartThreePanel({ active }) {
     }
   }
 
+  const header = (
+    <PageHeader
+      eyebrow="Docs · document chat"
+      title="Ask the handbook, not the internet."
+      description="Retrieval-grounded answers with citations, arithmetic, and per-session memory. If the handbook does not cover it, the agent says so."
+      meta={
+        health.status === "up"
+          ? `${health.data.document} · ${health.data.chunks} chunks · llm: ${health.data.llm_backend}${
+              health.data.llm_model ? `/${health.data.llm_model}` : ""
+            }`
+          : undefined
+      }
+      actions={healthBadge(health)}
+    />
+  );
+
   if (health.status === "down") {
     return (
-      <section hidden={!active} className="p-6">
+      <section hidden={!active} className="fade-up flex flex-col gap-6">
+        {header}
         <UnavailableCard onRetry={load} />
       </section>
     );
   }
 
   return (
-    <section
-      hidden={!active}
-      className="mx-auto grid w-full max-w-[1240px] grid-cols-1 items-start gap-5 p-6 lg:grid-cols-[1fr_minmax(260px,320px)]"
-    >
-      <Card className="min-h-[520px]">
-        <CardHeader>
-          <CardTitle>Conversation</CardTitle>
-          {health.status === "loading" ? (
-            <span className="flex items-center gap-2 text-caption-1-regular text-text-secondary">
-              <Spinner /> starting the agent…
-            </span>
-          ) : (
-            <span className="text-caption-1-regular text-text-secondary">
-              {health.data.document} · {health.data.chunks} chunks · llm: {health.data.llm_backend}
-              {health.data.llm_model ? `/${health.data.llm_model}` : ""}
-            </span>
-          )}
-        </CardHeader>
-        <CardContent className="flex min-h-0 flex-col gap-3.5">
-          <div className="flex min-h-[340px] max-h-[calc(100vh-360px)] flex-col gap-3.5 overflow-y-auto pr-1">
-            {messages.length === 0 ? (
-              <p className="text-body-2-regular italic text-text-secondary">
-                Ask about plans, pricing, storage or SLA credits.
-              </p>
+    <section hidden={!active} className="fade-up flex flex-col gap-6">
+      {header}
+
+      <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1fr)_300px]">
+        <Card className="min-h-0 xl:min-h-[560px]">
+          <CardHeader>
+            <CardTitle>Conversation</CardTitle>
+            {health.status === "loading" ? (
+              <span className="flex items-center gap-2 text-[10.5px] text-ink-faint">
+                <Spinner /> starting the agent…
+              </span>
             ) : (
-              messages.map((message, index) => <Bubble key={index} message={message} />)
+              <span className="text-[10.5px] text-ink-faint">
+                {health.data.document} · {health.data.chunks} chunks
+              </span>
             )}
-            <div ref={endRef} />
-          </div>
+          </CardHeader>
+          <CardContent className="flex min-h-0 flex-col gap-3.5">
+            <div className="flex min-h-[320px] max-h-[52vh] flex-col gap-3.5 overflow-y-auto pr-1 lg:max-h-[calc(100vh-390px)]">
+              {messages.length === 0 ? (
+                <EmptyState
+                  icon={RiChat3Line}
+                  title="Ask the handbook"
+                  description="Plans, pricing, storage, SLA credits — answers cite the source, and memory stays with this session."
+                  className="my-auto border-0 bg-transparent"
+                />
+              ) : (
+                messages.map((message, index) => <Bubble key={index} message={message} />)
+              )}
+              <div ref={endRef} />
+            </div>
 
-          <div className="flex flex-wrap gap-1.5">
-            {SUGGESTIONS.map((suggestion) => (
-              <Button
-                key={suggestion}
-                variant="secondary"
-                size="xs"
-                onClick={() => send(suggestion)}
-                disabled={busy}
-                title={suggestion}
-                className="max-w-[290px]"
-              >
-                <span className="truncate">
-                  {suggestion.length > 52 ? `${suggestion.slice(0, 50)}…` : suggestion}
-                </span>
-              </Button>
-            ))}
-          </div>
+            <div className="flex flex-wrap gap-1.5">
+              {SUGGESTIONS.map((suggestion) => (
+                <Button
+                  key={suggestion}
+                  variant="secondary"
+                  size="xs"
+                  onClick={() => send(suggestion)}
+                  disabled={busy}
+                  title={suggestion}
+                  className="max-w-full sm:max-w-[290px]"
+                >
+                  <span className="truncate">
+                    {suggestion.length > 52 ? `${suggestion.slice(0, 50)}…` : suggestion}
+                  </span>
+                </Button>
+              ))}
+            </div>
 
-          <form
-            className="flex gap-2"
-            onSubmit={(event) => {
-              event.preventDefault();
-              send();
-            }}
-          >
-            <TextField
-              value={input}
-              onChange={setInput}
-              aria-label="Message"
-              isDisabled={busy}
-              className="w-full"
+            <form
+              className="flex min-w-0 gap-2"
+              onSubmit={(event) => {
+                event.preventDefault();
+                send();
+              }}
             >
-              <InputBase
-                placeholder="Ask about plans, pricing, storage, SLA credits…"
-                autoComplete="off"
-                onKeyDown={(event) => {
-                  if (event.key === "Enter" && !event.shiftKey) {
-                    event.preventDefault();
-                    send();
-                  }
-                }}
-              />
-            </TextField>
-            <Button type="submit" leadingIcon={RiSendPlaneLine} disabled={busy || !input.trim()}>
-              Send
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-
-      <aside className="flex flex-col gap-4">
-        <MemoryCard memory={memory} onForget={forget} busy={busy} />
-        <SourceCard health={health.data} />
-        <Card>
-          <CardContent className="flex items-start gap-2 text-caption-1-regular text-text-secondary">
-            <RiChat3Line className="mt-0.5 size-4 shrink-0" aria-hidden />
-            <span>
-              Session <code className="font-mono">{id}</code>. Memory is stored per session in{" "}
-              <code className="font-mono">data/part3_sessions/</code>.
-            </span>
+              <TextField
+                value={input}
+                onChange={setInput}
+                aria-label="Message"
+                isDisabled={busy}
+                className="min-w-0 flex-1"
+              >
+                <InputBase
+                  placeholder="Ask about plans, pricing, storage, SLA credits…"
+                  autoComplete="off"
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" && !event.shiftKey) {
+                      event.preventDefault();
+                      send();
+                    }
+                  }}
+                />
+              </TextField>
+              <Button
+                type="submit"
+                leadingIcon={RiSendPlaneLine}
+                disabled={busy || !input.trim()}
+                className="shrink-0"
+              >
+                Send
+              </Button>
+            </form>
           </CardContent>
         </Card>
-      </aside>
+
+        <aside className="flex min-w-0 flex-col gap-4">
+          <MemoryCard memory={memory} onForget={forget} busy={busy} />
+          <SourceCard health={health.data} />
+          <Card>
+            <CardContent className="flex items-start gap-2 text-[10.5px] leading-relaxed text-ink-faint">
+              <RiChat3Line className="mt-0.5 size-4 shrink-0" aria-hidden />
+              <span className="min-w-0 break-words">
+                Session <code className="font-mono break-all text-ink-soft">{id}</code>. Memory is stored per
+                session in <code className="font-mono text-ink-soft">data/part3_sessions/</code>.
+              </span>
+            </CardContent>
+          </Card>
+        </aside>
+      </div>
     </section>
   );
 }

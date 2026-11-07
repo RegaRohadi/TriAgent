@@ -10,7 +10,7 @@ export function Card({ className, ref, ...props }: DivProps) {
     <div
       ref={ref}
       className={cx(
-        "flex min-w-0 flex-col gap-4 rounded-3xl border border-border-button-default bg-background-full p-5 shadow-card",
+        "flex min-w-0 flex-col gap-3.5 rounded-[1.15rem] border border-line bg-surface p-4 shadow-card md:p-5",
         className,
       )}
       {...props}
@@ -19,13 +19,15 @@ export function Card({ className, ref, ...props }: DivProps) {
 }
 
 export function CardHeader({ className, ref, ...props }: DivProps) {
-  return <div ref={ref} className={cx("flex items-center justify-between gap-3", className)} {...props} />;
+  return <div ref={ref} className={cx("flex flex-wrap items-center justify-between gap-3", className)} {...props} />;
 }
 
 export function CardTitle({ className, ...props }: HTMLAttributes<HTMLHeadingElement>) {
-  return <h2 className={cx("text-headline-semibold text-text-primary", className)} {...props} />;
+  return <h2 className={cx("text-[0.95rem] font-bold tracking-tight text-ink", className)} {...props} />;
 }
 
 export function CardContent({ className, ref, ...props }: DivProps) {
-  return <div ref={ref} className={cx("min-w-0 text-body-regular text-text-primary", className)} {...props} />;
+  return (
+    <div ref={ref} className={cx("min-w-0 text-[13px] leading-relaxed text-ink-soft", className)} {...props} />
+  );
 }

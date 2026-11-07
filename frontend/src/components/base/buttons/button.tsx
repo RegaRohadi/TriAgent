@@ -39,61 +39,63 @@ export interface ButtonLinkProps
 
 const styles = sortCx({
   base: [
-    "inline-flex items-center justify-center gap-0.5 whitespace-nowrap overflow-hidden",
-    "font-sans select-none cursor-pointer",
-    "button-press-motion",
-    "outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-border-focus-ring",
-    "disabled:cursor-not-allowed aria-disabled:cursor-not-allowed",
+    "inline-flex items-center justify-center gap-2 whitespace-nowrap overflow-hidden",
+    "font-sans font-semibold select-none cursor-pointer",
+    "outline-none transition-[background-color,border-color,color,box-shadow,transform] duration-150 ease",
+    "active:translate-y-px",
+    "focus-visible:ring-2 focus-visible:ring-brand/35 focus-visible:ring-offset-2 focus-visible:ring-offset-paper",
+    "disabled:cursor-not-allowed disabled:translate-y-0 disabled:opacity-50",
+    "aria-disabled:cursor-not-allowed aria-disabled:translate-y-0 aria-disabled:opacity-50",
   ].join(" "),
 
   size: {
-    medium: "h-9 rounded-2lg p-2 text-body-medium",
-    small:  "h-8 rounded-lg px-2 py-1.5 text-body-medium",
-    xs:     "h-6 rounded-sm px-2 text-caption-1-semibold",
+    medium: "h-10 rounded-[0.8rem] px-3.5 text-[13px]",
+    small: "h-8 rounded-[0.65rem] px-3 text-[12px]",
+    xs: "h-7 rounded-md px-2.5 text-[11px]",
   },
 
   iconOnlySize: {
-    medium: "",
-    small:  "size-8 p-0",
-    xs:     "size-6 p-0",
+    medium: "size-10 p-0",
+    small: "size-8 p-0",
+    xs: "size-7 p-0",
   },
 
   icon: {
-    medium: "size-5 shrink-0",
-    small:  "size-[18px] shrink-0",
-    xs:     "size-3.5 shrink-0",
+    medium: "size-[17px] shrink-0",
+    small: "size-[15px] shrink-0",
+    xs: "size-[13px] shrink-0",
   },
 
   label: {
-    medium: "inline-flex items-center justify-center px-1 shrink-0",
-    small:  "inline-flex items-center justify-center px-0.5 shrink-0",
-    xs:     "inline-flex items-center justify-center px-0.5 shrink-0",
+    medium: "inline-flex items-center justify-center shrink-0",
+    small: "inline-flex items-center justify-center shrink-0",
+    xs: "inline-flex items-center justify-center shrink-0",
   },
 
   variant: {
     primary: [
-      "bg-button-primary text-text-white shadow-xs",
-      "disabled:text-button-primary-disabled-foreground disabled:shadow-none",
-      "aria-disabled:text-button-primary-disabled-foreground aria-disabled:shadow-none",
+      "border border-brand-strong/15 bg-brand text-white shadow-xs",
+      "hover:bg-brand-hover active:bg-brand-strong",
+      "disabled:bg-surface-3 disabled:text-ink-faint disabled:border-line disabled:shadow-none",
+      "aria-disabled:bg-surface-3 aria-disabled:text-ink-faint aria-disabled:border-line aria-disabled:shadow-none",
     ].join(" "),
     danger: [
-      "bg-button-danger text-text-white shadow-xs",
-      "disabled:text-foreground-disabled-danger disabled:shadow-none",
-      "aria-disabled:text-foreground-disabled-danger aria-disabled:shadow-none",
+      "border border-transparent bg-danger text-white shadow-xs",
+      "hover:bg-danger/90 active:bg-danger",
+      "disabled:bg-surface-3 disabled:text-ink-faint disabled:shadow-none",
+      "aria-disabled:bg-surface-3 aria-disabled:text-ink-faint aria-disabled:shadow-none",
     ].join(" "),
     secondary: [
-      "bg-background-primary-default text-text-primary",
-      "border border-border-button-default shadow-xs",
-      "hover:bg-background-primary-hover  hover:border-border-button-hover",
-      "active:bg-background-primary-active active:border-border-button-active",
-      "disabled:bg-background-primary-disabled disabled:border-border-button-default disabled:text-text-tertiary disabled:shadow-none",
-      "aria-disabled:bg-background-primary-disabled aria-disabled:border-border-button-default aria-disabled:text-text-tertiary aria-disabled:shadow-none",
+      "border border-line-strong bg-surface text-ink shadow-xs",
+      "hover:border-line-strong hover:bg-surface-2 active:bg-surface-3",
+      "disabled:bg-surface-2 disabled:border-line disabled:text-ink-faint disabled:shadow-none",
+      "aria-disabled:bg-surface-2 aria-disabled:border-line aria-disabled:text-ink-faint aria-disabled:shadow-none",
     ].join(" "),
     ghost: [
-      "bg-button-ghost-background text-button-ghost-foreground",
-      "hover:bg-button-ghost-hover active:bg-button-ghost-active",
-      "disabled:bg-button-ghost-disabled disabled:text-button-ghost-disabled-foreground disabled:shadow-none",
-      "aria-disabled:bg-button-ghost-disabled aria-disabled:text-button-ghost-disabled-foreground aria-disabled:shadow-none",
+      "bg-transparent text-ink-soft",
+      "hover:bg-surface-2 hover:text-ink active:bg-surface-3",
+      "disabled:bg-transparent disabled:text-ink-faint disabled:shadow-none",
+      "aria-disabled:bg-transparent aria-disabled:text-ink-faint aria-disabled:shadow-none",
     ].join(" "),
   },
 });

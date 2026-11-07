@@ -17,7 +17,7 @@
   --color-accent-900: var(--color-blue-900);
   --color-accent-950: var(--color-blue-950);
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif,
+  --font-sans: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif,
                "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
                "Noto Color Emoji";
 

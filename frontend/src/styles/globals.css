@@ -1,11 +1,11 @@
 @import "tailwindcss";
 @import "./theme.css";
 @import "./typography.css";
+@import "./app-theme.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --font-inter: "Inter Variable";
   --font-mono-source: "JetBrains Mono";
 }
 
@@ -70,22 +70,28 @@ input[type="number"] {
   @apply w-full border-collapse text-left;
 }
 .bui-table th {
-  @apply px-3 py-2.5 text-left align-middle text-body-medium text-text-tertiary whitespace-nowrap outline-none;
-  background-color: var(--color-background-secondary-default);
-  border-top: 1px solid var(--color-separator-border);
-  border-bottom: 1px solid var(--color-separator-border);
+  @apply px-3 py-2.5 text-left align-middle text-[11px] font-semibold tracking-[0.04em] text-ink-faint uppercase whitespace-nowrap outline-none;
+  background-color: var(--surface-2);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
 }
 .bui-table td {
-  @apply px-3 py-2.5 align-middle text-body-medium text-text-primary outline-none;
+  @apply px-3 py-2.5 align-middle text-[12.5px] text-ink outline-none;
 }
 .bui-table tbody tr {
   @apply transition-colors duration-150;
-  border-bottom: 1px solid var(--color-separator-border);
+  border-bottom: 1px solid var(--line);
+}
+.bui-table tbody tr:last-child {
+  border-bottom: 0;
+}
+.bui-table tbody tr:hover {
+  background-color: var(--surface-2);
 }
 .bui-table tbody tr[data-focus-visible] {
   @apply ring-2 ring-inset ring-border-focus-ring;
 }
 .bui-table.bui-table-sm th,
 .bui-table.bui-table-sm td {
-  @apply px-2.5 py-1.5 text-body-2-medium;
+  @apply px-2.5 py-1.5 text-[11.5px];
 }

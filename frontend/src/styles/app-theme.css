@@ -1,0 +1,379 @@
+/*
+ * App theme — a compact, paper-and-ink visual language borrowed from the
+ * Psychotest project: soft blue-gray paper, white surfaces, a confident blue
+ * brand, amber accents, and dense, readable typography.
+ */
+
+:root {
+  --paper: #f3f6fa;
+  --surface: #ffffff;
+  --surface-2: #eef3f9;
+  --surface-3: #e4ecf5;
+  --ink: #0c1a2a;
+  --ink-soft: #46586b;
+  --ink-faint: #7a8b9d;
+  --line: #e0e8f1;
+  --line-strong: #c9d6e4;
+  --brand: #0b5fd0;
+  --brand-strong: #074aa6;
+  --brand-hover: #0a55ba;
+  --brand-soft: #e8f1fd;
+  --accent: #c97a0a;
+  --accent-soft: #fdf3e3;
+  --success: #0d8f61;
+  --success-soft: #e5f6ef;
+  --danger: #d63a51;
+  --danger-soft: #fdebed;
+  --shadow-card: 0 1px 2px rgba(12, 26, 42, 0.04), 0 8px 24px -18px rgba(12, 26, 42, 0.25);
+  --shadow-pop: 0 24px 60px -28px rgba(12, 26, 42, 0.4);
+
+  /* Re-map the existing design-system tokens onto the new palette. */
+  --color-text-primary: var(--ink);
+  --color-text-secondary: var(--ink-soft);
+  --color-text-tertiary: var(--ink-faint);
+  --color-text-disabled: color-mix(in srgb, var(--ink-faint) 55%, transparent);
+  --color-text-placeholder: var(--ink-faint);
+  --color-text-error-primary: var(--danger);
+  --color-input-disabled-text: var(--ink-faint);
+
+  --color-background-full: var(--paper);
+  --color-background-primary-default: var(--surface);
+  --color-background-inner-default: var(--surface);
+  --color-background-primary-hover: var(--surface-2);
+  --color-background-primary-active: var(--surface-3);
+  --color-background-primary-disabled: var(--surface-2);
+  --color-input-disabled-background: var(--surface-2);
+  --color-background-secondary-default: var(--surface-2);
+  --color-background-secondary-hover: var(--surface-3);
+  --color-background-tertiary-default: var(--surface-3);
+  --color-background-tertiary-hover: var(--line-strong);
+  --color-background-tertiary-error: var(--danger-soft);
+  --color-background-quaternary-default: var(--line-strong);
+  --color-background-quaternary-hover: var(--line-strong);
+  --color-background-quaternary-error: var(--danger-soft);
+  --color-avatar-neutral-background: var(--surface-3);
+
+  --color-border-button-default: var(--line);
+  --color-border-button-hover: var(--line-strong);
+  --color-border-button-active: var(--line-strong);
+  --color-border-error-default: var(--danger);
+  --color-separator-border: var(--line);
+  --color-separator-border-strong: var(--line-strong);
+  --color-border-focus-ring: var(--brand);
+  --color-border-checkbox-default: var(--line-strong);
+  --color-border-checkbox-hover: var(--ink-faint);
+  --color-border-checkbox-active: var(--ink-faint);
+
+  --color-foreground-icon-primary: var(--ink);
+  --color-foreground-icon-hover: var(--ink);
+  --color-foreground-icon-secondary: var(--ink-soft);
+  --color-foreground-icon-tertiary: var(--ink-faint);
+  --color-foreground-icon-quaternary: var(--line-strong);
+  --color-foreground-icon-error: var(--danger);
+  --color-foreground-icon-disabled: var(--line-strong);
+
+  --color-button-ghost-background: transparent;
+  --color-button-ghost-hover: var(--surface-2);
+  --color-button-ghost-active: var(--surface-3);
+  --color-button-ghost-disabled: var(--surface-2);
+  --color-button-ghost-foreground: var(--ink-soft);
+  --color-button-ghost-disabled-foreground: var(--ink-faint);
+  --color-dropdown-item-hover-background: var(--surface-2);
+  --color-pill-tab-blue-selected-background: var(--brand-soft);
+  --color-pill-tab-blue-hover-background: var(--surface-2);
+  --color-tab-count-selected-background: var(--brand-soft);
+  --color-badge-neutral-background: var(--surface-2);
+
+  --color-status-lime-background: var(--success-soft);
+  --color-status-lime-text: var(--success);
+  --color-status-rose-background: var(--danger-soft);
+  --color-status-rose-text: var(--danger);
+  --color-status-yellow-background: var(--accent-soft);
+  --color-status-yellow-text: var(--accent);
+  --color-status-cyan-background: color-mix(in srgb, var(--brand) 9%, var(--surface));
+  --color-status-cyan-text: var(--brand);
+  --color-status-blue-background: var(--brand-soft);
+  --color-status-blue-text: var(--brand);
+  --color-status-purple-background: var(--brand-soft);
+  --color-status-purple-text: var(--brand);
+  --color-status-dot-green-halo: var(--success-soft);
+  --color-status-dot-yellow-halo: var(--accent-soft);
+  --color-status-dot-indigo-halo: var(--brand-soft);
+
+  --color-notification-information-background: var(--brand-soft);
+  --color-notification-information-foreground: var(--brand);
+  --color-notification-success-background: var(--success-soft);
+  --color-notification-success-foreground: var(--success);
+  --color-notification-error-background: var(--danger-soft);
+  --color-notification-error-foreground: var(--danger);
+
+  --color-accent-50: var(--brand-soft);
+  --color-accent-100: color-mix(in srgb, var(--brand) 10%, var(--surface));
+  --color-accent-200: color-mix(in srgb, var(--brand) 20%, var(--surface));
+  --color-accent-300: color-mix(in srgb, var(--brand) 35%, var(--surface));
+  --color-accent-400: color-mix(in srgb, var(--brand) 70%, var(--surface));
+  --color-accent-500: var(--brand);
+  --color-accent-600: var(--brand);
+  --color-accent-700: var(--brand-strong);
+  --color-accent-800: var(--brand-strong);
+  --color-accent-900: color-mix(in srgb, var(--brand-strong) 75%, #000);
+  --color-accent-950: color-mix(in srgb, var(--brand-strong) 55%, #000);
+
+  --shadow-2xs: 0 1px rgba(12, 26, 42, 0.05);
+  --shadow-xs: 0 1px 2px rgba(12, 26, 42, 0.06);
+  --shadow-sm: 0 1px 2px rgba(12, 26, 42, 0.05), 0 1px 3px rgba(12, 26, 42, 0.08);
+  --shadow-md: 0 2px 4px -1px rgba(12, 26, 42, 0.05), 0 4px 6px -1px rgba(12, 26, 42, 0.08);
+  --shadow-lg: 0 4px 6px -2px rgba(12, 26, 42, 0.04), 0 10px 15px -3px rgba(12, 26, 42, 0.08);
+  --shadow-xl: 0 10px 10px -5px rgba(12, 26, 42, 0.03), 0 20px 25px -5px rgba(12, 26, 42, 0.08);
+  --shadow-dropdown: 0 1px 1px rgba(12, 26, 42, 0.04), 0 4px 12px rgba(12, 26, 42, 0.06);
+}
+
+.dark {
+  --paper: #0a111d;
+  --surface: #111a28;
+  --surface-2: #162131;
+  --surface-3: #1d2a3d;
+  --ink: #edf3fb;
+  --ink-soft: #a8b8ca;
+  --ink-faint: #75879b;
+  --line: #223047;
+  --line-strong: #31435c;
+  --brand: #5b9bf3;
+  --brand-strong: #85b6f8;
+  --brand-hover: #6fa8f5;
+  --brand-soft: #132b48;
+  --accent: #eeb05a;
+  --accent-soft: #33260f;
+  --success: #3ccf99;
+  --success-soft: #0e2d24;
+  --danger: #f1798d;
+  --danger-soft: #35191f;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 30px -20px rgba(0, 0, 0, 0.7);
+  --shadow-pop: 0 30px 70px -30px rgba(0, 0, 0, 0.85);
+
+  --color-text-primary: var(--ink);
+  --color-text-secondary: var(--ink-soft);
+  --color-text-tertiary: var(--ink-faint);
+  --color-text-placeholder: var(--ink-faint);
+  --color-text-error-primary: var(--danger);
+
+  --color-background-full: var(--paper);
+  --color-background-primary-default: var(--surface);
+  --color-background-inner-default: var(--surface);
+  --color-background-primary-hover: var(--surface-2);
+  --color-background-primary-active: var(--surface-3);
+  --color-background-primary-disabled: var(--surface-2);
+  --color-input-disabled-background: var(--surface-2);
+  --color-background-secondary-default: var(--surface-2);
+  --color-background-secondary-hover: var(--surface-3);
+  --color-background-tertiary-default: var(--surface-3);
+  --color-background-tertiary-hover: var(--line-strong);
+  --color-background-tertiary-error: var(--danger-soft);
+  --color-background-quaternary-default: var(--line-strong);
+  --color-background-quaternary-hover: var(--line-strong);
+  --color-background-quaternary-error: var(--danger-soft);
+  --color-avatar-neutral-background: var(--surface-3);
+
+  --color-border-button-default: var(--line);
+  --color-border-button-hover: var(--line-strong);
+  --color-border-button-active: var(--line-strong);
+  --color-border-error-default: var(--danger);
+  --color-separator-border: var(--line);
+  --color-separator-border-strong: var(--line-strong);
+  --color-border-focus-ring: var(--brand);
+
+  --color-foreground-icon-primary: var(--ink);
+  --color-foreground-icon-hover: var(--ink);
+  --color-foreground-icon-secondary: var(--ink-soft);
+  --color-foreground-icon-tertiary: var(--ink-faint);
+  --color-foreground-icon-quaternary: var(--line-strong);
+  --color-foreground-icon-error: var(--danger);
+  --color-foreground-icon-disabled: var(--line-strong);
+
+  --color-button-ghost-background: transparent;
+  --color-button-ghost-hover: var(--surface-2);
+  --color-button-ghost-active: var(--surface-3);
+  --color-button-ghost-disabled: var(--surface-2);
+  --color-button-ghost-foreground: var(--ink-soft);
+  --color-button-ghost-disabled-foreground: var(--ink-faint);
+  --color-dropdown-item-hover-background: var(--surface-2);
+  --color-pill-tab-blue-selected-background: var(--brand-soft);
+  --color-pill-tab-blue-hover-background: var(--surface-2);
+
+  --color-status-lime-background: var(--success-soft);
+  --color-status-lime-text: var(--success);
+  --color-status-rose-background: var(--danger-soft);
+  --color-status-rose-text: var(--danger);
+  --color-status-yellow-background: var(--accent-soft);
+  --color-status-yellow-text: var(--accent);
+  --color-status-cyan-background: color-mix(in srgb, var(--brand) 18%, var(--surface));
+  --color-status-cyan-text: var(--brand);
+  --color-status-blue-background: var(--brand-soft);
+  --color-status-blue-text: var(--brand);
+  --color-status-purple-background: var(--brand-soft);
+  --color-status-purple-text: var(--brand);
+
+  --color-accent-50: var(--brand-soft);
+  --color-accent-100: color-mix(in srgb, var(--brand) 18%, var(--surface));
+  --color-accent-200: color-mix(in srgb, var(--brand) 30%, var(--surface));
+  --color-accent-300: color-mix(in srgb, var(--brand) 50%, var(--surface));
+  --color-accent-400: color-mix(in srgb, var(--brand) 75%, var(--surface));
+  --color-accent-500: var(--brand);
+  --color-accent-600: var(--brand);
+  --color-accent-700: var(--brand-strong);
+  --color-accent-800: var(--brand-strong);
+  --color-accent-900: color-mix(in srgb, var(--brand) 35%, #000);
+  --color-accent-950: color-mix(in srgb, var(--brand) 20%, #000);
+
+  --shadow-2xs: 0 1px rgba(0, 0, 0, 0.16);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.18);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.16);
+  --shadow-md: 0 2px 4px -1px rgba(0, 0, 0, 0.12), 0 4px 6px -1px rgba(0, 0, 0, 0.18);
+  --shadow-lg: 0 4px 6px -2px rgba(0, 0, 0, 0.1), 0 10px 15px -3px rgba(0, 0, 0, 0.18);
+  --shadow-xl: 0 10px 10px -5px rgba(0, 0, 0, 0.08), 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+  --shadow-dropdown: 0 1px 1px rgba(0, 0, 0, 0.14), 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-soft: var(--brand-soft);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--brand);
+    color: #fff;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--line-strong);
+    border: 3px solid var(--paper);
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer components {
+  .container-page {
+    width: 100%;
+    max-width: 1240px;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .container-page {
+      padding-inline: 1.75rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .container-page {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  .fade-up {
+    animation: fade-up 460ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .fade-in {
+    animation: fade-in 320ms ease both;
+  }
+
+  .soft-pulse {
+    animation: soft-pulse 1.6s ease-in-out infinite;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes soft-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -28,8 +28,8 @@ export function Label({
       data-label="true"
       {...props}
       className={cx(
-        "flex cursor-default items-center gap-0.5",
-        "text-body-medium text-text-primary",
+        "flex cursor-default items-center gap-1",
+        "text-[12px] font-semibold text-ink-soft",
         className,
       )}
     >

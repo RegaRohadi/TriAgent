@@ -16,9 +16,10 @@ export function DecisionTrace({ trace }) {
     <Card>
       <CardHeader>
         <CardTitle>Decision trace</CardTitle>
+        <span className="text-[10.5px] font-medium text-ink-faint">{(trace || []).length} event(s)</span>
       </CardHeader>
       <CardContent>
-        <Table aria-label="Decision trace" size="sm" className="min-w-[520px]">
+        <Table aria-label="Decision trace" size="sm" className="min-w-[560px]">
           <TableHeader>
             <TableColumn isRowHeader>Node</TableColumn>
             <TableColumn>Outcome</TableColumn>
@@ -28,14 +29,14 @@ export function DecisionTrace({ trace }) {
           <TableBody>
             {(trace || []).map((ev, i) => (
               <TableRow key={i} id={i}>
-                <TableCell className="font-semibold whitespace-nowrap">{ev.node}</TableCell>
+                <TableCell className="font-semibold whitespace-nowrap text-ink">{ev.node}</TableCell>
                 <TableCell>
                   <Chip variant="caption" color={HIT_PATTERN.test(ev.outcome) ? "rose" : "lime"}>
                     {ev.outcome}
                   </Chip>
                 </TableCell>
-                <TableCell className="font-mono text-caption-1-regular! text-text-secondary!">{traceDetail(ev.detail)}</TableCell>
-                <TableCell className="text-right whitespace-nowrap text-text-secondary!">{ev.elapsed_ms}ms</TableCell>
+                <TableCell className="font-mono text-[10.5px]! text-ink-faint!">{traceDetail(ev.detail)}</TableCell>
+                <TableCell className="text-right whitespace-nowrap text-ink-faint!">{ev.elapsed_ms}ms</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -49,8 +50,11 @@ export function KnowledgeBaseContext({ chunks, retrieveRan, maxLen = 320, emptyT
   let body;
   if (chunks && chunks.length) {
     body = chunks.map((c, i) => (
-      <div key={i} className="rounded-r-xl border-l-2 border-accent-500 bg-background-secondary-default px-3 py-2 text-body-2-regular">
-        <div className="mb-1 text-caption-1-regular text-text-secondary">
+      <div
+        key={i}
+        className="rounded-xl border border-line bg-surface-2 px-3 py-2 text-[12px] leading-relaxed text-ink-soft"
+      >
+        <div className="mb-1 text-[10.5px] font-medium text-ink-faint">
           {c.doc_id} §{c.section} · similarity {c.score.toFixed(3)}
         </div>
         {c.text.slice(0, maxLen)}
@@ -58,15 +62,19 @@ export function KnowledgeBaseContext({ chunks, retrieveRan, maxLen = 320, emptyT
       </div>
     ));
   } else if (emptyText) {
-    body = <div className="italic text-text-secondary">{emptyText}</div>;
+    body = <div className="text-[12px] text-ink-faint italic">{emptyText}</div>;
   } else if (retrieveRan) {
     body = (
-      <div className="italic text-text-secondary">
+      <div className="text-[12px] leading-relaxed text-ink-faint italic">
         No chunk passed the similarity floor — an empty result is itself an escalation trigger.
       </div>
     );
   } else {
-    body = <div className="italic text-text-secondary">Retrieval never ran: the email was escalated earlier in the pipeline.</div>;
+    body = (
+      <div className="text-[12px] leading-relaxed text-ink-faint italic">
+        Retrieval never ran: the email was escalated earlier in the pipeline.
+      </div>
+    );
   }
 
   return (

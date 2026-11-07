@@ -46,14 +46,14 @@ export function TextArea({
             placeholder={placeholder}
             className={({ isHovered, isFocused, isDisabled, isInvalid: invalid }) =>
               cx(
-                "w-full resize-y rounded-2lg border-0 bg-background-tertiary-default px-3 py-2",
-                "font-sans text-body-regular text-text-primary outline-none",
-                "ring-2 ring-inset ring-transparent placeholder:text-text-tertiary",
-                "transition-[background-color,box-shadow] duration-[var(--input-transition-ms)] ease",
-                isHovered && !isFocused && !isDisabled && !invalid && "ring-border-button-hover",
-                isFocused && !isDisabled && !invalid && "ring-border-button-active",
-                isDisabled && "cursor-not-allowed bg-input-disabled-background text-input-disabled-text",
-                invalid && "bg-background-tertiary-error",
+                "w-full resize-y rounded-[0.75rem] border border-line-strong bg-surface px-3 py-2.5",
+                "font-sans text-[13px] leading-relaxed text-ink outline-none",
+                "ring-0 ring-transparent placeholder:text-ink-faint",
+                "transition-[background-color,border-color,box-shadow] duration-[var(--input-transition-ms)] ease",
+                isHovered && !isFocused && !isDisabled && !invalid && "border-ink-faint/60",
+                isFocused && !isDisabled && !invalid && "border-brand ring-[3px] ring-brand/15",
+                isDisabled && "cursor-not-allowed bg-surface-2 text-ink-faint",
+                invalid && "border-danger bg-danger-soft",
                 textAreaClassName,
               )
             }

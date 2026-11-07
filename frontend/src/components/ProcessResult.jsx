@@ -4,20 +4,21 @@ import { DecisionTrace, KnowledgeBaseContext } from "./DecisionTrace.jsx";
 import { PipelineFlow } from "./PipelineFlow.jsx";
 
 const SEND_NOTE = {
-  sent: (sender) => <p className="font-mono text-caption-1-regular text-status-lime-text">✓ sent to {sender}</p>,
+  sent: (sender) => <p className="font-mono text-[11px] text-success">✓ sent to {sender}</p>,
   smtp_not_configured: () => (
-    <p className="font-mono text-caption-1-regular text-text-secondary">
+    <p className="font-mono text-[11px] leading-relaxed text-ink-faint">
       not sent — SMTP is not configured (set SMTP_* in .env to enable sending)
     </p>
   ),
   smtp_error: () => (
-    <p className="font-mono text-caption-1-regular text-text-error-primary">
+    <p className="font-mono text-[11px] leading-relaxed text-danger">
       send failed — SMTP is configured but the attempt errored, see server logs
     </p>
   ),
 };
 
-const PRE = "whitespace-pre-wrap rounded-xl bg-background-secondary-default p-3 font-mono text-body-2-regular text-text-primary";
+const PRE =
+  "whitespace-pre-wrap break-words rounded-xl border border-line bg-surface-2 p-3 font-mono text-[11.5px] leading-relaxed text-ink";
 
 export function ProcessResult({ state }) {
   const human = state.final_action === "route_to_human";
@@ -45,11 +46,11 @@ export function ProcessResult({ state }) {
         <CardContent className="flex flex-col gap-3">
           <p className="flex flex-wrap items-center gap-2">
             <Chip color={human ? "rose" : "lime"}>{human ? "ROUTE TO HUMAN" : "AUTO DRAFT"}</Chip>
-            <span className="font-mono text-caption-1-regular text-text-secondary">trace_id={state.trace_id}</span>
+            <span className="font-mono text-[10.5px] break-all text-ink-faint">trace_id={state.trace_id}</span>
           </p>
           <div>{cats}</div>
           {human ? (
-            <div className="rounded-r-xl border-l-2 border-border-error-default bg-background-tertiary-error px-3 py-2.5 text-body-regular">
+            <div className="rounded-xl border border-danger/25 bg-danger-soft px-3 py-2.5 text-[12px] leading-relaxed text-ink">
               <b>Routed to a human</b> — reason: <code>{state.route_reason}</code>, priority: <b>{state.priority}</b>
               {state.precheck_evidence ? (
                 <>
@@ -75,7 +76,7 @@ export function ProcessResult({ state }) {
           ) : (
             <>
               <pre className={PRE}>{state.draft?.text || ""}</pre>
-              <p className="font-mono text-caption-1-regular text-text-secondary">
+              <p className="font-mono text-[10.5px] break-words text-ink-faint">
                 citations: {(state.draft?.citations || []).join(", ")}
               </p>
               {sendNote}

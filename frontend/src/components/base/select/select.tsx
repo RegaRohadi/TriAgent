@@ -72,16 +72,16 @@ export function Select<T extends object>({
           <AriaButton
             ref={triggerRef}
             className={cx(
-              "flex w-full cursor-pointer items-center justify-between rounded-2lg",
-              "border border-border-button-default bg-background-primary-default shadow-xs",
-              "text-text-primary",
-              "transition-[background-color,border-color,box-shadow,padding,font-size] duration-200 ease",
-              "hover:bg-background-primary-hover hover:border-border-button-hover",
-              "outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-border-focus-ring",
-              "disabled:cursor-not-allowed disabled:bg-background-primary-disabled disabled:text-text-tertiary disabled:shadow-none",
+              "flex w-full cursor-pointer items-center justify-between rounded-[0.75rem]",
+              "border border-line-strong bg-surface shadow-xs",
+              "text-ink",
+              "transition-[background-color,border-color,box-shadow,padding,font-size] duration-150 ease",
+              "hover:border-ink-faint/60 hover:bg-surface-2",
+              "outline-none focus-visible:border-brand focus-visible:ring-[3px] focus-visible:ring-brand/15",
+              "disabled:cursor-not-allowed disabled:border-line disabled:bg-surface-2 disabled:text-ink-faint disabled:shadow-none",
               size === "sm"
-                ? "gap-1 px-[7px] py-1 text-body-2-medium"
-                : "gap-1.5 px-2.5 py-2 text-body-medium",
+                ? "gap-1 px-2.5 py-1.5 text-[11px]"
+                : "gap-1.5 px-3 py-2.5 text-[13px]",
               triggerClassName,
             )}
           >

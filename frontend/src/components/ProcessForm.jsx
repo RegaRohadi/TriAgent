@@ -47,10 +47,11 @@ export function ProcessForm({ samples, onRun, running }) {
     <Card>
       <CardHeader>
         <CardTitle>Incoming email</CardTitle>
+        <span className="text-[10.5px] font-medium text-ink-faint">sample or paste</span>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
-        <div className="flex flex-col gap-1">
-          <span id="sample-label" className="text-body-medium text-text-primary">
+        <div className="flex flex-col gap-1.5">
+          <span id="sample-label" className="text-[12px] font-semibold text-ink-soft">
             Load a sample
           </span>
           <Select
@@ -72,10 +73,11 @@ export function ProcessForm({ samples, onRun, running }) {
         </div>
 
         <Input
-          label="Sender address (used for the contact-frequency rule)"
+          label="Sender address"
           placeholder="customer@example.com"
           value={sender}
           onChange={setSender}
+          hint="Used for the contact-frequency rule."
         />
 
         <Input label="Subject" placeholder="Question about my invoice" value={subject} onChange={setSubject} />
@@ -92,9 +94,9 @@ export function ProcessForm({ samples, onRun, running }) {
           onClick={handleSubmit}
           disabled={running || !body.trim()}
           leadingIcon={RiSendPlaneLine}
-          className="self-start"
+          className="w-full"
         >
-          Process email
+          {running ? "Processing…" : "Process email"}
         </Button>
       </CardContent>
     </Card>

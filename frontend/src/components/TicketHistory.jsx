@@ -3,7 +3,6 @@ import { Button } from "@/components/base/buttons/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/base/card/card";
 import { Chip } from "@/components/base/badges/chip";
 import { Spinner } from "@/components/base/spinner/spinner";
-import { PillTab, PillTabList } from "@/components/base/tabs/pill-tab";
 import { RowButton } from "./RowButton.jsx";
 import { NOTE_TONE, STATUS_COLOR, STATUS_LABEL } from "../constants.js";
 
@@ -24,42 +23,63 @@ export function TicketHistory({ data, statusFilter, onFilterChange, selectedTrac
           disabled={fetchBusy}
           leadingIcon={fetchBusy ? Spinner : RiInboxArchiveLine}
         >
-          Fetch inbox now
+          {fetchBusy ? "Fetching…" : "Fetch inbox now"}
         </Button>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
         {fetchStatus?.text && (
-          <p className={`text-caption-1-regular ${NOTE_TONE[fetchStatus.kind] || NOTE_TONE.note}`}>{fetchStatus.text}</p>
+          <p className={`text-[11px] leading-relaxed ${NOTE_TONE[fetchStatus.kind] || NOTE_TONE.note}`}>
+            {fetchStatus.text}
+          </p>
         )}
 
-        <PillTabList aria-label="Filter by status" className="flex-wrap">
-          {filters.map(([value, label, n]) => (
-            <PillTab key={value || "all"} variant="gray" isSelected={statusFilter === value} onSelect={() => onFilterChange(value)}>
-              {label} <span className="text-text-tertiary">{n}</span>
-            </PillTab>
-          ))}
-        </PillTabList>
+        <div role="group" aria-label="Filter by status" className="flex flex-wrap gap-1.5">
+          {filters.map(([value, label, n]) => {
+            const selected = statusFilter === value;
+            return (
+              <button
+                key={value || "all"}
+                type="button"
+                aria-pressed={selected}
+                onClick={() => onFilterChange(value)}
+                className={`inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-semibold transition-colors outline-none focus-visible:ring-2 focus-visible:ring-brand/35 ${
+                  selected
+                    ? "border-ink bg-ink text-surface"
+                    : "border-line bg-surface text-ink-soft hover:border-line-strong hover:text-ink"
+                }`}
+              >
+                {label}
+                <span className={`text-[10px] font-bold ${selected ? "text-surface/70" : "text-ink-faint"}`}>{n}</span>
+              </button>
+            );
+          })}
+        </div>
 
-        <div className="flex max-h-[62vh] flex-col gap-1.5 overflow-y-auto">
+        <div className="-mx-1 flex max-h-[48vh] flex-col gap-1.5 overflow-y-auto px-1 lg:max-h-[56vh]">
           {tickets.map((t) => (
             <RowButton key={t.trace_id} selected={selectedTrace === t.trace_id} onClick={() => onOpenTicket(t.trace_id)}>
-              <span className="mb-1 flex items-center gap-2">
+              <span className="mb-1 flex min-w-0 items-center gap-2">
                 <Chip variant="caption" color={STATUS_COLOR[t.status]}>
                   {STATUS_LABEL[t.status] || t.status}
                 </Chip>
-                <span className="truncate text-body-semibold text-text-primary">{t.subject || "(no subject)"}</span>
+                <span className="truncate text-[12px] font-semibold text-ink">{t.subject || "(no subject)"}</span>
               </span>
-              <span className="block break-words text-caption-1-regular text-text-secondary">
+              <span className="block break-words text-[10.5px] leading-relaxed text-ink-faint">
                 {t.customer_email} · {t.route_reason || "handled"}
               </span>
             </RowButton>
           ))}
+          {!tickets.length && (
+            <p className="rounded-xl border border-dashed border-line px-3 py-6 text-center text-[11px] leading-relaxed text-ink-faint">
+              No tickets recorded yet — process an email first.
+            </p>
+          )}
         </div>
 
-        <p className="text-caption-1-regular text-text-secondary">
+        <p className="text-[10.5px] leading-relaxed text-ink-faint">
           {tickets.length
             ? `Showing ${tickets.length} ticket(s). Click one to see its decision trail.`
-            : "No tickets recorded yet — process an email first."}
+            : "History appears here after the agent handles an email."}
         </p>
       </CardContent>
     </Card>

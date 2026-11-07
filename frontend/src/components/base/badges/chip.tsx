@@ -11,22 +11,22 @@ export interface ChipProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 const styles = sortCx({
-  base: "inline-flex items-center justify-center rounded-md px-1.5 whitespace-nowrap transition-[padding,font-size] duration-200 ease",
+  base: "inline-flex items-center justify-center gap-1 rounded-full border px-2.5 whitespace-nowrap font-semibold leading-normal transition-[padding,font-size] duration-200 ease",
   variant: {
-    bold: "py-0.5 text-body-medium",
-    subtle: "py-1 text-body-medium",
-    caption: "py-1 text-caption-1-medium",
+    bold: "py-0.5 text-[11px]",
+    subtle: "py-1 text-[11px]",
+    caption: "py-1 text-[10.5px]",
   },
   color: {
-    lime: "bg-status-lime-background text-status-lime-text",
-    rose: "bg-status-rose-background text-status-rose-text",
-    yellow: "bg-status-yellow-background text-status-yellow-text",
-    cyan: "bg-status-cyan-background text-status-cyan-text",
-    blue: "bg-status-blue-background text-status-blue-text",
-    purple: "bg-status-purple-background text-status-purple-text",
-    neutral: "bg-background-tertiary-default text-text-secondary",
-    gray: "bg-background-secondary-default text-text-primary",
-    soft: "bg-background-secondary-default text-text-secondary",
+    lime: "border-success/25 bg-success-soft text-success",
+    rose: "border-danger/25 bg-danger-soft text-danger",
+    yellow: "border-accent/25 bg-accent-soft text-accent",
+    cyan: "border-brand/25 bg-brand-soft text-brand",
+    blue: "border-brand/25 bg-brand-soft text-brand",
+    purple: "border-brand/25 bg-brand-soft text-brand",
+    neutral: "border-line bg-surface-2 text-ink-soft",
+    gray: "border-line bg-surface-2 text-ink-soft",
+    soft: "border-line bg-surface text-ink-soft",
   },
 });
 

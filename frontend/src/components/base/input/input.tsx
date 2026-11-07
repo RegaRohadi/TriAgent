@@ -82,36 +82,36 @@ export interface InputBaseProps extends Omit<AriaInputProps, "size" | "className
 const inputStyles = sortCx({
   field: [
     "relative flex w-full items-center",
-    "rounded-2lg",
-    "bg-background-tertiary-default text-foreground-icon-tertiary",
-    "ring-2 ring-inset ring-transparent",
-    "transition-[background-color,box-shadow,color] duration-[var(--input-transition-ms)] ease",
+    "rounded-[0.75rem]",
+    "border border-line-strong bg-surface text-ink-faint",
+    "ring-0 ring-transparent",
+    "transition-[background-color,border-color,box-shadow,color] duration-[var(--input-transition-ms)] ease",
   ].join(" "),
 
   fieldSize: {
-    medium: "p-2",
-    small:  "h-8 px-1.5 py-2",
+    medium: "h-10 px-3",
+    small: "h-8 px-2.5",
   },
 
   fieldWithAddonSize: {
-    medium: "h-9 pl-1 pr-2 py-2",
-    small:  "h-8 pl-1 pr-1.5 py-2",
+    medium: "h-10 pl-2 pr-3",
+    small: "h-8 pl-1.5 pr-2.5",
   },
 
   content: "flex w-full items-center gap-2 min-w-0",
-  leftSection: "flex flex-1 items-center gap-0.5 min-w-0",
+  leftSection: "flex flex-1 items-center gap-2 min-w-0",
 
   input: [
     "min-w-0 flex-1 bg-transparent border-0 outline-none p-0 m-0",
-    "font-sans text-body-regular text-text-primary pl-1",
-    "placeholder:text-text-tertiary",
-    "focus:placeholder:text-text-primary",
-    "disabled:text-input-disabled-text disabled:placeholder:text-input-disabled-text",
+    "font-sans text-[13px] text-ink",
+    "placeholder:text-ink-faint",
+    "focus:placeholder:text-ink-faint",
+    "disabled:text-ink-faint disabled:placeholder:text-ink-faint",
     "disabled:cursor-not-allowed",
-    "aria-invalid:placeholder:text-text-error-placeholder",
+    "aria-invalid:placeholder:text-danger/70",
   ].join(" "),
 
-  icon: "size-5 shrink-0",
+  icon: "size-4 shrink-0 text-ink-faint",
 });
 
 export function InputBase({
@@ -142,14 +142,14 @@ export function InputBase({
             !isFocusWithin &&
             !isDisabled &&
             !isInvalid &&
-            "ring-border-button-hover",
+            "border-ink-faint/60",
           isFocusWithin &&
             !isDisabled &&
             !isInvalid &&
-            "ring-border-button-active",
+            "border-brand ring-[3px] ring-brand/15",
           isDisabled &&
-            "bg-input-disabled-background text-input-disabled-foreground",
-          isInvalid && "bg-background-tertiary-error text-foreground-icon-error",
+            "bg-surface-2 text-ink-faint",
+          isInvalid && "border-danger bg-danger-soft text-danger",
           ctx.fieldClassName,
           fieldClassName,
         )

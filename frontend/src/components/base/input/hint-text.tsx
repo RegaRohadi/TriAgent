@@ -21,8 +21,8 @@ export function HintText({
       slot={isInvalid ? "errorMessage" : "description"}
       {...props}
       className={cx(
-        "pt-px text-caption-1-medium text-text-secondary",
-        isInvalid && "text-text-error-primary",
+        "pt-1 text-[11px] leading-relaxed text-ink-faint",
+        isInvalid && "text-danger",
         className,
       )}
     />

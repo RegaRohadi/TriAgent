@@ -99,8 +99,7 @@ export function PillTabList({ children, className, ref, ...props }: PillTabListP
           aria-hidden
           className={cx(
             "pointer-events-none absolute left-0 top-0",
-            "transition-[transform,width,height] duration-300",
-            "[transition-timing-function:cubic-bezier(0.34,1.2,0.64,1)]",
+            "transition-[transform,width,height] duration-300 ease-out",
             styles.radius[thumb.variant],
             styles.thumb[thumb.variant],
           )}

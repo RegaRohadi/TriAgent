@@ -20,10 +20,10 @@ const ARROW_W = 28;
 const STEP = NODE_W + ARROW_W;
 
 const STATUS_STYLE = {
-  success: "border-transparent bg-status-lime-background text-status-lime-text",
-  danger: "border-transparent bg-status-rose-background text-status-rose-text",
-  neutral: "border-border-button-default bg-background-secondary-default text-text-secondary",
-  pending: "border-dashed border-border-button-hover text-text-tertiary",
+  success: "border-success/25 bg-success-soft text-success",
+  danger: "border-danger/25 bg-danger-soft text-danger",
+  neutral: "border-line bg-surface-2 text-ink-soft",
+  pending: "border-dashed border-line-strong text-ink-faint",
 };
 
 function traceDetail(detail) {
@@ -37,12 +37,12 @@ function NodeBox({ label, status, outcome, elapsedMs, detail }) {
   return (
     <div
       style={{ width: NODE_W }}
-      className={cx("shrink-0 rounded-xl border px-2 py-1.5 text-center", STATUS_STYLE[status])}
+      className={cx("shrink-0 rounded-lg border px-2 py-1.5 text-center", STATUS_STYLE[status])}
       title={detail ? traceDetail(detail) : undefined}
     >
-      <div className="truncate text-caption-1-semibold">{label}</div>
-      {outcome ? <div className="mt-0.5 truncate text-caption-2-regular opacity-90">{outcome}</div> : null}
-      {elapsedMs != null ? <div className="text-caption-2-regular opacity-70">{elapsedMs}ms</div> : null}
+      <div className="truncate text-[10.5px] font-semibold">{label}</div>
+      {outcome ? <div className="mt-0.5 truncate text-[9.5px] font-medium opacity-90">{outcome}</div> : null}
+      {elapsedMs != null ? <div className="text-[9px] opacity-70">{elapsedMs}ms</div> : null}
     </div>
   );
 }
@@ -51,7 +51,7 @@ function Arrow({ dim }) {
   return (
     <div
       style={{ width: ARROW_W }}
-      className={cx("flex shrink-0 items-center justify-center text-foreground-icon-tertiary", dim && "opacity-40")}
+      className={cx("flex shrink-0 items-center justify-center text-ink-faint", dim && "opacity-40")}
     >
       <RiArrowRightLine aria-hidden className="size-4" />
     </div>
@@ -79,9 +79,10 @@ export function PipelineFlow({ trace }) {
     <Card>
       <CardHeader>
         <CardTitle>Pipeline flow</CardTitle>
+        <span className="text-[10.5px] font-medium text-ink-faint">spine · scroll →</span>
       </CardHeader>
       <CardContent>
-        <div className="overflow-x-auto pb-1">
+        <div className="-mx-1 overflow-x-auto px-1 pb-1">
           <div className="flex w-max items-center">
             {SPINE.map((n, i) => {
               const ev = byNode.get(n.key);
@@ -97,8 +98,8 @@ export function PipelineFlow({ trace }) {
           </div>
           {branch ? (
             <div style={{ marginLeft: branch.fromIndex * STEP + NODE_W / 2 - 1 }} className="flex w-max flex-col items-start">
-              <div className="h-4 w-0.5 bg-current text-foreground-icon-tertiary" />
-              <div className="-ml-[6px] text-foreground-icon-tertiary">▾</div>
+              <div className="h-4 w-0.5 bg-current text-ink-faint" />
+              <div className="-ml-[6px] text-ink-faint">▾</div>
             </div>
           ) : null}
           {branch ? (
